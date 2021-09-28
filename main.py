@@ -1,4 +1,4 @@
-#TODO
+# TODO
 # mostra quante istruzioni sono state effettuate
 # aggiungi END alla fine in automatico
 # cambia la directory del codice da leggere
