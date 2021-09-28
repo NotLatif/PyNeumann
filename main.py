@@ -1,9 +1,9 @@
-# TODO
-# mostra quante istruzioni sono state effettuate
-# aggiungi END alla fine in automatico
+#TODO
+# migliora con le classi
 # cambia la directory del codice da leggere
 # possibilità di scegliere il metodo di lettura DEBUG
 # maybe? aggiungi un menu
+# aggiungi commenti
 
 class col:
     HEADER = '\033[95m'
@@ -16,7 +16,12 @@ class col:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def read(): 
+def incIst():
+    global nIstruzioni
+    nIstruzioni += 1
+
+def read():
+    incIst()
     global accumulatore
     inp = input(f'{col.CYAN}input> ')
     try:
@@ -26,93 +31,114 @@ def read():
     print(col.ENDC, end = '')
 
 def write():
+    incIst()
     nastroScr = accumulatore
     print(f'{col.GREEN}Nastro Scrittura > {nastroScr}')
     print(col.ENDC, end = '')
 
 def load(x):
+    incIst()
     global accumulatore
     global memoria
     accumulatore = memoria[x]
 
 def store(x):
+    incIst()
     global accumulatore
     global memoria
     memoria[x] = accumulatore
 
 def add(x):
+    incIst()
     global accumulatore
     accumulatore += memoria[x]
 
 def sub(x):
+    incIst()
     global accumulatore
     accumulatore -= memoria[x]
 
 def mult(x):
+    incIst()
     global accumulatore
     accumulatore *= memoria[x]
 
 def div(x):
+    incIst()
     global accumulatore
     accumulatore //= memoria[x]
 
 def loadEq(x):
+    incIst()
     global accumulatore
     accumulatore = x
 
 def storeEq(x):
+    incIst()
     pass #Instruction not defined
 
 def addEq(x):
+    incIst()
     global accumulatore
     accumulatore += x
 
 def subEq(x):
+    incIst()
     global accumulatore
     accumulatore -= x
 
 def multEq(x):
+    incIst()
     global accumulatore
     accumulatore *= x
 
 def divEq(x):
+    incIst()
     global accumulatore
     accumulatore //= x
 
 def br(x):
+    incIst()
     global linea
     linea = int(x)
 
 def beq(x):
+    incIst()
     global linea
     if (accumulatore == 0):
         linea = x
 
 def bge(x):
+    incIst()
     global linea
     if (accumulatore >= 0):
         linea = x
 
 def bg(x):
+    incIst()
     global linea
     if (accumulatore > 0):
         linea = x
 
 def ble(x):
+    incIst()
     global linea
     if (accumulatore <= 0):
         linea = x
 
 def bl(x):
+    incIst()
     global linea
     if (accumulatore < 0):
         linea = x
 
 def loadAt(x):
+    incIst()
     pos = memoria[x]
     load(x)
 
 def storeAt(x):
+    incIst()
     pos = memoria[x]
     store(x)
 
@@ -125,6 +151,8 @@ if(__name__=='__main__'):
     memoria = {}
     linea = 0
     
+    #system vars
+    nIstruzioni = 0
     rawCode = []
     code = {}
     #open and read code
@@ -140,6 +168,9 @@ if(__name__=='__main__'):
         except IndexError:
             code[i] = [x[0].upper()]
         i+=1
+    
+    if(code[len(code)-1] != 'END'):
+        code[len(code)] = ['END']
 
     #execute
     while True: #for word in code
@@ -208,5 +239,6 @@ if(__name__=='__main__'):
             print(f'  ->"{cmd}"')
             print(f'{col.BOLD}  row:{istr}{col.ENDC}')
     
-print(f'[ACC]: {accumulatore}')
+print(f'{col.GREEN}{col.BOLD}[ACC]: {accumulatore}')
 print(f'[MEM]: {memoria}')
+print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
