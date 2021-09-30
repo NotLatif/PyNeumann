@@ -1,12 +1,12 @@
 #TODO
 # migliora con le classi
-# cambia la directory del codice da leggere
 # possibilità di scegliere il metodo di lettura DEBUG
 # maybe? aggiungi un menu
 # aggiungi commenti
 # modifica il sistema commenti e il sistema di controllo commenti
 #   fail ex. > read legge il numero di numeri 
 
+#colors
 class col:
     HEADER = '\033[95m'
     BLUE = '\033[94m'
@@ -18,10 +18,12 @@ class col:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+#n of instructions counter
 def incIst():
     global nIstruzioni
     nIstruzioni += 1
 
+#i/o instructions
 def read():
     incIst()
     global accumulatore
@@ -50,6 +52,7 @@ def store(x):
     global memoria
     memoria[x] = accumulatore
 
+#arithmetic instructions
 def add(x):
     incIst()
     global accumulatore
@@ -77,7 +80,6 @@ def loadEq(x):
 
 def storeEq(x):
     incIst()
-    pass #Instruction not defined
 
 def addEq(x):
     incIst()
@@ -99,47 +101,48 @@ def divEq(x):
     global accumulatore
     accumulatore //= x
 
-def br(x):
+#logic instructions
+def br(x): #BRanch (unconditioned)
     incIst()
     global linea
     linea = int(x)
 
-def beq(x):
+def beq(x): #BranchEQual (if [ACC] == 0)
     incIst()
     global linea
     if (accumulatore == 0):
         linea = x
 
-def bge(x):
+def bge(x): #BranchGreaterEqual (if [ACC] >= 0)
     incIst()
     global linea
     if (accumulatore >= 0):
         linea = x
 
-def bg(x):
+def bg(x): #BranchGreater (if [ACC] > 0)
     incIst()
     global linea
     if (accumulatore > 0):
         linea = x
 
-def ble(x):
+def ble(x): #BranchLowerEqual (if [ACC] <= 0)
     incIst()
     global linea
     if (accumulatore <= 0):
         linea = x
 
-def bl(x):
+def bl(x): #BranchLower (if [ACC] < 0)
     incIst()
     global linea
     if (accumulatore < 0):
         linea = x
 
-def loadAt(x):
+def loadAt(x): #Load [x]
     incIst()
     pos = memoria[x]
     load(x)
 
-def storeAt(x):
+def storeAt(x): #Store [x]
     incIst()
     pos = memoria[x]
     store(x)
@@ -174,7 +177,6 @@ if(__name__=='__main__'):
     if(code[len(code)-1] != 'END'):
         code[len(code)] = ['END']
 
-    #print(code) DEBUG purpose
     #execute
     while True: #for word in code
         istr = linea
@@ -193,7 +195,8 @@ if(__name__=='__main__'):
         print(f'  [ACC]: {accumulatore}')
         print(f'  [MEM]: {memoria}')
 
-        if(cmd == 'READ'):
+        #instructions
+        if(cmd == 'READ'):#i/o
             read()
         elif(cmd == 'WRITE'):
             write()
@@ -201,7 +204,7 @@ if(__name__=='__main__'):
             load(arg)
         elif(cmd == 'STORE'): 
             store(arg)
-        elif(cmd == 'ADD'):
+        elif(cmd == 'ADD'):#arithmetic
             add(arg)
         elif(cmd == 'SUB'):
             sub(arg)
@@ -219,7 +222,7 @@ if(__name__=='__main__'):
             multEq(arg)
         elif(cmd == 'DIV='):
             divEq(arg)
-        elif(cmd == 'BR'):
+        elif(cmd == 'BR'):#logic
             br(arg)
         elif(cmd == 'BEQ'):
             beq(arg)
@@ -242,6 +245,7 @@ if(__name__=='__main__'):
             print(f'  ->"{cmd}"')
             print(f'{col.BOLD}  row:{istr}{col.ENDC}')
     
+#print output
 print(f'{col.HEADER}{col.BOLD}[ACC]: {accumulatore}{col.GREEN}')
 print(f'[MEM]: {memoria}')
 print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
