@@ -242,3 +242,10 @@ if(__name__=='__main__'):
 print(f'{col.GREEN}{col.BOLD}[ACC]: {accumulatore}')
 print(f'[MEM]: {memoria}')
 print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
+
+#Heyyy ciao amore mio Scusa ho sbagliato hahahahha asp ahahahahah ok 😍❤❤❤🤣❤(❁´◡`❁) hahahaahaha hahahahahahah l'ho scoperto ieri tipo figo
+ # codice?? yes esegue quello che scrivo qui
+ # figo ahhahaahahahahahahahahahahaahahahahhaahah premi win+. tieni premuto oh ma da me si sono aperte le emoji ahahahahahahahahahah .
+# mi sa che attraverso parsec non va oh no 🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕`ha`ahahhuishiuhqa no vabbe comunque volevo solo fare una capatina ciaoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+# la tipa che fa esercitazioni di informatica sembra scema cioè per come parla anche non sembra molto convinta oh no ahhahaah min oer inNO VAI PARLA hahahahahahah c=va====== vauuuuu=i=i=i=i=====
+# ciera questo esempio ha dettooo minoridi 11 # ciera cinqueciiiento  ciiieeeera. ..u..n.a. .vio....lta vabbe amo vado okay amo a dopo allora ciao ciao ciao ciaaos paspasp ora lo pusho su git guarda
