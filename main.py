@@ -249,3 +249,4 @@ print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
 # mi sa che attraverso parsec non va oh no 🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕`ha`ahahhuishiuhqa no vabbe comunque volevo solo fare una capatina ciaoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 # la tipa che fa esercitazioni di informatica sembra scema cioè per come parla anche non sembra molto convinta oh no ahhahaah min oer inNO VAI PARLA hahahahahahah c=va====== vauuuuu=i=i=i=i=====
 # ciera questo esempio ha dettooo minoridi 11 # ciera cinqueciiiento  ciiieeeera. ..u..n.a. .vio....lta vabbe amo vado okay amo a dopo allora ciao ciao ciao ciaaos paspasp ora lo pusho su git guarda
+# benvenuta nella mia repository hahahahahaha  nooooo ahahahahah che vergogna pazzo 😝 ahahHAHAHAAHAHAH #LINGUA 🍋🍋🍋🍋🍋🍋ⓂⓂmmhhhhhmmhmhmhmhmmmmmmmmmmmmmmmmmmmmhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
