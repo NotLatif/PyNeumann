@@ -1,5 +1,4 @@
 #TODO
-# migliora con le classi
 # possibilità di scegliere il metodo di lettura DEBUG
 # maybe? aggiungi un menu
 # aggiungi commenti
@@ -77,9 +76,6 @@ def loadEq(x):
     incIst()
     global accumulatore
     accumulatore = x
-
-def storeEq(x):
-    incIst()
 
 def addEq(x):
     incIst()
@@ -172,6 +168,7 @@ if(__name__=='__main__'):
             code[i] = [x[0].upper(), x[1]]
         except IndexError:
             code[i] = [x[0].upper()]
+
         i+=1
     
     if(code[len(code)-1] != 'END'):
