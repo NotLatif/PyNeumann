@@ -1,0 +1,20 @@
+load= 0
+store 1
+read
+div= 2
+store 0
+beq 17
+read
+read
+sub 1
+bg 11
+br 13
+add 1
+store 1
+load 0
+sub= 1
+store 0
+br 5
+load 1
+write
+end

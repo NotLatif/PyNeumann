@@ -4,6 +4,8 @@
 # possibilità di scegliere il metodo di lettura DEBUG
 # maybe? aggiungi un menu
 # aggiungi commenti
+# modifica il sistema commenti e il sistema di controllo commenti
+#   fail ex. > read legge il numero di numeri 
 
 class col:
     HEADER = '\033[95m'
@@ -143,7 +145,7 @@ def storeAt(x):
     store(x)
 
 
-
+#Script Start
 if(__name__=='__main__'):
     #init vars
     nastroScr = 0
@@ -156,7 +158,7 @@ if(__name__=='__main__'):
     rawCode = []
     code = {}
     #open and read code
-    with open('c:/Users/Latif/Desktop/Programmazione/PyProjects/Van Neumann/code.neumann') as f:
+    with open('main.code') as f:
         rawCode = f.readlines()
 
     #separate code from arguments, and remove comments
@@ -172,6 +174,7 @@ if(__name__=='__main__'):
     if(code[len(code)-1] != 'END'):
         code[len(code)] = ['END']
 
+    #print(code) DEBUG purpose
     #execute
     while True: #for word in code
         istr = linea
@@ -185,7 +188,7 @@ if(__name__=='__main__'):
             arg = None
 
         #debug
-        print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[]')
+        print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+1}]')
         print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
         print(f'  [ACC]: {accumulatore}')
         print(f'  [MEM]: {memoria}')
@@ -239,7 +242,6 @@ if(__name__=='__main__'):
             print(f'  ->"{cmd}"')
             print(f'{col.BOLD}  row:{istr}{col.ENDC}')
     
-print(f'{col.GREEN}{col.BOLD}[ACC]: {accumulatore}')
+print(f'{col.HEADER}{col.BOLD}[ACC]: {accumulatore}{col.GREEN}')
 print(f'[MEM]: {memoria}')
 print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
-
