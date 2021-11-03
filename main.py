@@ -1,7 +1,10 @@
 # TODO
 # maybe? aggiungi un menu
 # aggiungi commenti
+# try casting and not casting int() when using arithmetics
+
 import config as cfg
+import glob, os
 
 #colors
 class col:
@@ -144,35 +147,49 @@ def storeAt(x): #Store [x]
 
 #Script Start
 if(__name__=='__main__'):
+
+    files = []
+    if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
+        os.chdir("./")
+        x = 0
+        for file in glob.glob("*.code"):
+            files.append(file)
+            print(f"[{x}]{file}")
+            x+=1
+
+        print("Quale file vuoi aprire?")
+        cfg.fileName = files[int(input("[int] > "))]
+    
     #init vars
     nastroScr = 0
     accumulatore = 0
     memoria = {}
     linea = 0
-    commentChar = '#'
     
     #system vars
     nIstruzioni = 0
     rawCode = []
     code = {}
     #open and read code
-    with open('main.code') as f:
+    with open(cfg.fileName) as f:
         rawCode = f.readlines()
 
     #separate code from arguments, and remove comments
     i = 0
     for word in rawCode:
-        word = word.split(commentChar, 1)[0]
-        x = word.split()
+        word = word.split(cfg.commentChar, 1)[0] #remove comments
+        x = word.split() #split string for management
 
-        if(x != []):
-            try:
-                code[i] = [x[0].upper(), x[1]]
-            except IndexError:
-                code[i] = [x[0].upper()]
+        #store commands in dict {row:[cmd, arg]}
+        if(x != []): #if row is not comment
+            try: #has args
+                code[i] = [x[0].upper(), x[1]] #[cmd, arg]
+            except IndexError: #has no args
+                code[i] = [x[0].upper()] #[cmd]
+
         i+=1
     
-    if(code[len(code)-1] != 'END'):
+    if(code[len(code)-1] != 'END'): #if end instruction is missing add one at the end
         code[len(code)] = ['END']
 
     #execute
@@ -200,18 +217,22 @@ if(__name__=='__main__'):
                 read()
             elif(cmd == 'WRITE'):
                 write()
-            elif(cmd == 'LOAD'):
-                load(arg+cfg.startLine)
+            elif(cmd == 'LOAD'):#memory
+                load(arg)
             elif(cmd == 'STORE'): 
-                store(arg+cfg.startLine)
+                store(arg)
+            elif(cmd == 'LOAD@'):
+                loadAt(arg-cfg.startLine)
+            elif(cmd == 'STORE@'):
+                storeAt(arg-cfg.startLine)
             elif(cmd == 'ADD'):#arithmetic
-                add(arg+cfg.startLine)
+                add(arg)
             elif(cmd == 'SUB'):
-                sub(arg+cfg.startLine)
+                sub(arg)
             elif(cmd == 'MULT'):
-                mult(arg+cfg.startLine)
+                mult(arg)
             elif(cmd == 'DIV'):
-                div(arg+cfg.startLine)
+                div(arg)
             elif(cmd == 'LOAD='):
                 loadEq(arg)
             elif(cmd == 'ADD='):
@@ -223,28 +244,24 @@ if(__name__=='__main__'):
             elif(cmd == 'DIV='):
                 divEq(arg)
             elif(cmd == 'BR'):#logic
-                br(arg+cfg.startLine)
+                br(arg-cfg.startLine)
             elif(cmd == 'BEQ'):
-                beq(arg+cfg.startLine)
+                beq(arg-cfg.startLine)
             elif(cmd == 'BGE'):
-                bge(arg+cfg.startLine)
+                bge(arg-cfg.startLine)
             elif(cmd == 'BG'):
-                bg(arg+cfg.startLine)
+                bg(arg-cfg.startLine)
             elif(cmd == 'BLE'):
-                ble(arg+cfg.startLine)
+                ble(arg-cfg.startLine)
             elif(cmd == 'BL'):
-                bl(arg+cfg.startLine)
-            elif(cmd == 'LOAD@'):
-                loadAt(arg+cfg.startLine)
-            elif(cmd == 'STORE@'):
-                storeAt(arg+cfg.startLine)
+                bl(arg-cfg.startLine)
             elif(cmd == 'END'):
                 break
             else:
                 print(f'{col.FAIL}ERROR, command not found')
                 print(f'  ->"{cmd}"')
                 print(f'{col.BOLD}  row:{istr}{col.ENDC}')
-        except KeyError:
+        except KeyError: #Could be triggered by: LOAD STORE LOAD@ STORE@
             print(f'{col.FAIL}ERROR, address in memory does not exit')
             print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
             print(f'    [MEM]: {memoria}')
