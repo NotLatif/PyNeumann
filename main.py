@@ -1,7 +1,6 @@
 # TODO
-# maybe? aggiungi un menu
-# aggiungi commenti
 # try casting and not casting int() when using arithmetics
+# aggiorna il file README
 
 import config as cfg
 import glob, os
