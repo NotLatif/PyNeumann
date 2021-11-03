@@ -193,54 +193,57 @@ if(__name__=='__main__'):
         print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
 
         #instructions
-        if(cmd == 'READ'):#i/o
-            read()
-        elif(cmd == 'WRITE'):
-            write()
-        elif(cmd == 'LOAD'):
-            load(arg)
-        elif(cmd == 'STORE'): 
-            store(arg)
-        elif(cmd == 'ADD'):#arithmetic
-            add(arg)
-        elif(cmd == 'SUB'):
-            sub(arg)
-        elif(cmd == 'MULT'):
-            mult(arg)
-        elif(cmd == 'DIV'):
-            div(arg)
-        elif(cmd == 'LOAD='):
-            loadEq(arg)
-        elif(cmd == 'ADD='):
-            addEq(arg)
-        elif(cmd == 'SUB='):
-            subEq(arg)
-        elif(cmd == 'MULT='):
-            multEq(arg)
-        elif(cmd == 'DIV='):
-            divEq(arg)
-        elif(cmd == 'BR'):#logic
-            br(arg)
-        elif(cmd == 'BEQ'):
-            beq(arg)
-        elif(cmd == 'BGE'):
-            bge(arg)
-        elif(cmd == 'BG'):
-            bg(arg)
-        elif(cmd == 'BLE'):
-            ble(arg)
-        elif(cmd == 'BL'):
-            bl(arg)
-        elif(cmd == 'LOAD@'):
-            loadAt(arg)
-        elif(cmd == 'STORE@'):
-            storeAt(arg)
-        elif(cmd == 'END'):
-            break
-        else:
-            print(f'{col.FAIL}ERROR, command not found')
-            print(f'  ->"{cmd}"')
-            print(f'{col.BOLD}  row:{istr}{col.ENDC}')
+        try:
+            if(cmd == 'READ'):#i/o
+                read()
+            elif(cmd == 'WRITE'):
+                write()
+            elif(cmd == 'LOAD'):
+                load(arg)
+            elif(cmd == 'STORE'): 
+                store(arg)
+            elif(cmd == 'ADD'):#arithmetic
+                add(arg)
+            elif(cmd == 'SUB'):
+                sub(arg)
+            elif(cmd == 'MULT'):
+                mult(arg)
+            elif(cmd == 'DIV'):
+                div(arg)
+            elif(cmd == 'LOAD='):
+                loadEq(arg)
+            elif(cmd == 'ADD='):
+                addEq(arg)
+            elif(cmd == 'SUB='):
+                subEq(arg)
+            elif(cmd == 'MULT='):
+                multEq(arg)
+            elif(cmd == 'DIV='):
+                divEq(arg)
+            elif(cmd == 'BR'):#logic
+                br(arg)
+            elif(cmd == 'BEQ'):
+                beq(arg)
+            elif(cmd == 'BGE'):
+                bge(arg)
+            elif(cmd == 'BG'):
+                bg(arg)
+            elif(cmd == 'BLE'):
+                ble(arg)
+            elif(cmd == 'BL'):
+                bl(arg)
+            elif(cmd == 'LOAD@'):
+                loadAt(arg)
+            elif(cmd == 'STORE@'):
+                storeAt(arg)
+            elif(cmd == 'END'):
+                break
+            else:
+                print(f'{col.FAIL}ERROR, command not found')
+                print(f'  ->"{cmd}"')
+                print(f'{col.BOLD}  row:{istr}{col.ENDC}')
+        except KeyError:
+            print(f'{col.FAIL}ERROR, address in memory does not exit{col.ENDC}')
     
 #print output
 print(f'[MEM]: {memoria}')
