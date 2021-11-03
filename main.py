@@ -188,9 +188,9 @@ if(__name__=='__main__'):
 
         #debug
         print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+1}]')
-        print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
         print(f'  [ACC]: {accumulatore}')
         print(f'  [MEM]: {memoria}')
+        print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
 
         #instructions
         if(cmd == 'READ'):#i/o
@@ -243,6 +243,18 @@ if(__name__=='__main__'):
             print(f'{col.BOLD}  row:{istr}{col.ENDC}')
     
 #print output
-print(f'{col.HEADER}{col.BOLD}[ACC]: {accumulatore}{col.GREEN}')
 print(f'[MEM]: {memoria}')
 print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
+print(f'{col.HEADER}{col.BOLD}[ACC]: {accumulatore}{col.GREEN}')
+
+
+
+
+'''
+Fix bug in code:
+LOAD= 1
+STORE 100
+DIV 2
+LOAD 100
+WRITE
+'''
