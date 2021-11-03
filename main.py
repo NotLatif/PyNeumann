@@ -1,9 +1,7 @@
-#TODO
-# possibilità di scegliere il metodo di lettura DEBUG
+# TODO
 # maybe? aggiungi un menu
 # aggiungi commenti
-# modifica il sistema commenti e il sistema di controllo commenti
-#   fail ex. > read legge il numero di numeri 
+import config as cfg
 
 #colors
 class col:
@@ -26,7 +24,7 @@ def incIst():
 def read():
     incIst()
     global accumulatore
-    inp = input(f'{col.CYAN}input> ')
+    inp = input(f'{col.CYAN}input > ')
     try:
         accumulatore = int(inp)
     except:
@@ -36,7 +34,7 @@ def read():
 def write():
     incIst()
     nastroScr = accumulatore
-    print(f'{col.GREEN}Nastro Scrittura > {nastroScr}')
+    print(f'{col.GREEN}output > {nastroScr}')
     print(col.ENDC, end = '')
 
 def load(x):
@@ -151,6 +149,7 @@ if(__name__=='__main__'):
     accumulatore = 0
     memoria = {}
     linea = 0
+    commentChar = '#'
     
     #system vars
     nIstruzioni = 0
@@ -163,12 +162,14 @@ if(__name__=='__main__'):
     #separate code from arguments, and remove comments
     i = 0
     for word in rawCode:
+        word = word.split(commentChar, 1)[0]
         x = word.split()
-        try:
-            code[i] = [x[0].upper(), x[1]]
-        except IndexError:
-            code[i] = [x[0].upper()]
 
+        if(x != []):
+            try:
+                code[i] = [x[0].upper(), x[1]]
+            except IndexError:
+                code[i] = [x[0].upper()]
         i+=1
     
     if(code[len(code)-1] != 'END'):
@@ -187,10 +188,11 @@ if(__name__=='__main__'):
             arg = None
 
         #debug
-        print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+1}]')
-        print(f'  [ACC]: {accumulatore}')
-        print(f'  [MEM]: {memoria}')
-        print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
+        if(cfg.show_debug):
+            print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+cfg.startLine}]')
+            print(f'  [ACC]: {accumulatore}')
+            print(f'  [MEM]: {memoria}')
+            print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
 
         #instructions
         try:
@@ -199,17 +201,17 @@ if(__name__=='__main__'):
             elif(cmd == 'WRITE'):
                 write()
             elif(cmd == 'LOAD'):
-                load(arg)
+                load(arg+cfg.startLine)
             elif(cmd == 'STORE'): 
-                store(arg)
+                store(arg+cfg.startLine)
             elif(cmd == 'ADD'):#arithmetic
-                add(arg)
+                add(arg+cfg.startLine)
             elif(cmd == 'SUB'):
-                sub(arg)
+                sub(arg+cfg.startLine)
             elif(cmd == 'MULT'):
-                mult(arg)
+                mult(arg+cfg.startLine)
             elif(cmd == 'DIV'):
-                div(arg)
+                div(arg+cfg.startLine)
             elif(cmd == 'LOAD='):
                 loadEq(arg)
             elif(cmd == 'ADD='):
@@ -221,21 +223,21 @@ if(__name__=='__main__'):
             elif(cmd == 'DIV='):
                 divEq(arg)
             elif(cmd == 'BR'):#logic
-                br(arg)
+                br(arg+cfg.startLine)
             elif(cmd == 'BEQ'):
-                beq(arg)
+                beq(arg+cfg.startLine)
             elif(cmd == 'BGE'):
-                bge(arg)
+                bge(arg+cfg.startLine)
             elif(cmd == 'BG'):
-                bg(arg)
+                bg(arg+cfg.startLine)
             elif(cmd == 'BLE'):
-                ble(arg)
+                ble(arg+cfg.startLine)
             elif(cmd == 'BL'):
-                bl(arg)
+                bl(arg+cfg.startLine)
             elif(cmd == 'LOAD@'):
-                loadAt(arg)
+                loadAt(arg+cfg.startLine)
             elif(cmd == 'STORE@'):
-                storeAt(arg)
+                storeAt(arg+cfg.startLine)
             elif(cmd == 'END'):
                 break
             else:
@@ -243,21 +245,13 @@ if(__name__=='__main__'):
                 print(f'  ->"{cmd}"')
                 print(f'{col.BOLD}  row:{istr}{col.ENDC}')
         except KeyError:
-            print(f'{col.FAIL}ERROR, address in memory does not exit{col.ENDC}')
+            print(f'{col.FAIL}ERROR, address in memory does not exit')
+            print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
+            print(f'    [MEM]: {memoria}')
+            print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
     
 #print output
+print(' -- FINAL OUTPUT --')
 print(f'[MEM]: {memoria}')
 print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
-print(f'{col.HEADER}{col.BOLD}[ACC]: {accumulatore}{col.GREEN}')
-
-
-
-
-'''
-Fix bug in code:
-LOAD= 1
-STORE 100
-DIV 2
-LOAD 100
-WRITE
-'''
+print(f'{col.HEADER}{col.BOLD}[ACC]: {accumulatore}{col.GREEN}{col.ENDC}\n')
