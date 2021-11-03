@@ -1,6 +1,10 @@
 # TODO
 # try casting and not casting int() when using arithmetics
 # aggiorna il file README
+# aggiungi impostazioni personalizzabili come istruzioni
+# eg.
+#   lnstrt x <- lineStart = x
+#
 
 import config as cfg
 import glob, os
@@ -8,14 +12,12 @@ import glob, os
 #colors
 class col:
     HEADER = '\033[95m'
-    BLUE = '\033[94m'
     CYAN = '\033[96m'
     GREEN = '\033[92m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
 
 #n of instructions counter
 def incIst():
@@ -254,6 +256,8 @@ if(__name__=='__main__'):
                 ble(arg-cfg.startLine)
             elif(cmd == 'BL'):
                 bl(arg-cfg.startLine)
+            elif(cmd == 'LNSTRT'):#misc
+                cfg.startLine = arg
             elif(cmd == 'END'):
                 break
             else:

@@ -1,6 +1,21 @@
-LOAD= 1
-STORE 100
-DIV 2
-LOAD 100
-WRITE
-READ
+lnstrt 0
+load= 0
+store 1
+read
+div= 2
+store 0
+beq 18
+read
+read
+sub 1
+bg 12
+br 14
+add 1
+store 1
+load 0
+sub= 1
+store 0
+br 6
+load 1
+write
+end
