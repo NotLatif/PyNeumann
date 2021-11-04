@@ -47,10 +47,14 @@ Il programma principale: `main.py` apre il file `config.filename` e lo legge rig
 
 ##### `config.py`
 Questo è il file di configurazione che contiene alcuni parametri modificabili dall'utente:
-- `showDebug` (`bool`) -> [`True`] da come output l'esecuzione del programma istruzione per istruzione mentre viene interpretato; altrimenti [`False`] restituisce solo il risultato finale
+- `showDebug` (`bool`) -> [True] da come output l'esecuzione del programma istruzione per istruzione mentre viene interpretato; altrimenti [False] restituisce solo il risultato finale
 - `startLine` (`int`) -> definisce la linea da cui si vuole iniziare a contare. Normalmente nel linguaggio di Von Neumann la prima riga è la riga `0`, però per facilità di scrittura del codice attraverso editor di testo che iniziano a contare le righe da `1`, il valore si può impostare ad 1
 - `commentChar`(`char`) -> permette di cambiare il carattere scelto per i commenti (default: `#`)
 - `filename` (`string`) -> definisce il file da leggere dal simulatore, può essere lasciato vuoto
+- `useFileInput` (`bool`) -> Se impostato su True leggerà gli input dal file `inputFile`, altrimenti dal terminale attraverso cui lo script viene eseguito
+- `inputFile` (`string`) -> Il nome del file da cui possono venir letti gli input se viene impostato `useFileInput = True`. Gli input vanno scritti nel file `inputFile` uno per riga
+- `outputFile` (`string`) -> È il file su cui viene salvato il risultato delle operazioni (debug compreso), lascia vuoto se non vuoi un output su file
+- `minimalOutput` (`bool`) -> Se impostato su True, salverà nel file `outputFile` solamente il valore dell'accumulatore
  
 ####   ATTENZIONE
 Il valore di `config.startLine` causerà problemi a codici scritti avendo in mente un valore diverso, per questo dopo l'istruzione `END`si può usare l'istruzone `$LNSTRT x` per sovrascrivere il valore di `config.startLine` con il valore `x`  

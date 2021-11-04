@@ -5,3 +5,4 @@ fileName = 'main.code'
 useFileInput = True
 inputFile = 'input.txt'
 outputFile = 'output.txt'
+minimalOutput = False
