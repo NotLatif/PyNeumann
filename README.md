@@ -56,8 +56,17 @@ Questo è il file di configurazione che contiene alcuni parametri modificabili d
 - `outputFile` (`string`) -> È il file su cui viene salvato il risultato delle operazioni (debug compreso), lascia vuoto se non vuoi un output su file
 - `minimalOutput` (`bool`) -> Se impostato su True, salverà nel file `outputFile` solamente il valore dell'accumulatore
  
-####   ATTENZIONE
+###   ATTENZIONE
 Il valore di `config.startLine` causerà problemi a codici scritti avendo in mente un valore diverso, per questo dopo l'istruzione `END`si può usare l'istruzone `$LNSTRT x` per sovrascrivere il valore di `config.startLine` con il valore `x`  
+
+Utilizzare i commenti su righe dedicate potrebbe causare problemi con le istruzioni logiche (`BR, BEQ, ...`) per questo è sempre preferibile commentare alla fine del codice oppure accanto alle istruzioni:
+```
+LOAD 123 # commento bellissimo
+...
+END
+#creato da me
+#altri commenti
+```
 
 Se `config.filename` viene lasciato vuoto (`''`) il programma chiederà quale dei file `*.code` presenti nella stessa directory aprire 
 
