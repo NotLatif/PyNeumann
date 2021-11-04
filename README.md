@@ -1,5 +1,5 @@
 # PyNeumann
-Un simulatore delle istruzioni di Von Neumann (made by NotLatif)
+Un simulatore della macchina di Von Neumann (made by NotLatif)
 
 ## La macchina di Von Neumann  
 La [macchina di Von Neumann](https://it.wikipedia.org/wiki/Architettura_di_von_Neumann) è costituita da quattro elementi fondamentali:
