@@ -17,6 +17,7 @@ class vars:
     nIstruzioni = 0
     accumulatore = 0
     linea = 0
+    fileInputStrings = []
 
 #n of instructions counter
 def incIst():
@@ -138,6 +139,10 @@ if(__name__=='__main__'):
         print("Quale file vuoi aprire?")
         cfg.fileName = files[int(input("[int] > "))]
 
+    if(cfg.useFileInput):
+        with open(cfg.inputFile) as f:
+            vars.fileInputStrings = f.read().splitlines()
+
     #init vars
     nastroScr = 0
     memoria = {}
@@ -162,7 +167,6 @@ if(__name__=='__main__'):
                 code[i] = [x[0].upper(), x[1]] #[cmd, arg]
             except IndexError: #has no args
                 code[i] = [x[0].upper()] #[cmd]
-
         i+=1
 
     hadLnstrt = 0
