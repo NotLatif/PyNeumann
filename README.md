@@ -2,7 +2,7 @@
 Un simulatore delle istruzioni di Von Neumann (made by NotLatif)
 
 ## La macchina di Von Neumann  
-La macchina di Von Neumann è costituita da quattro elementi fondamentali:
+La [macchina di Von Neumann](https://it.wikipedia.org/wiki/Architettura_di_von_Neumann) è costituita da quattro elementi fondamentali:
 
 - l'unità di elaborazione (CPU)
 - la memoria centrale (RAM)
@@ -47,13 +47,13 @@ Il programma principale: `main.py` apre il file `config.filename` e lo legge rig
 
 ##### `config.py`
 Questo è il file di configurazione che contiene alcuni parametri modificabili dall'utente:
-- `showDebug` (`True`) da come output l'esecuzione del programma istruzione per istruzione mentre viene interpretato; altrimenti (`False`) restituisce solo il risultato finale
-- `startLine` (`int`) definisce la linea da cui si vuole iniziare a contare. Normalmente nel linguaggio di Von Neumann la prima riga è la riga `0`, però per facilità di scrittura del codice attraverso editor di testo che iniziano a contare le righe da `1`, il valore si può impostare ad 1
-- `commentChar`(`char`) permette di cambiare il carattere scelto per i commenti (default: `#`)
-- `filename` (`string`) definisce il file da leggere dal simulatore, può essere lasciato vuoto
+- `showDebug` (`bool`) -> [`True`] da come output l'esecuzione del programma istruzione per istruzione mentre viene interpretato; altrimenti [`False`] restituisce solo il risultato finale
+- `startLine` (`int`) -> definisce la linea da cui si vuole iniziare a contare. Normalmente nel linguaggio di Von Neumann la prima riga è la riga `0`, però per facilità di scrittura del codice attraverso editor di testo che iniziano a contare le righe da `1`, il valore si può impostare ad 1
+- `commentChar`(`char`) -> permette di cambiare il carattere scelto per i commenti (default: `#`)
+- `filename` (`string`) -> definisce il file da leggere dal simulatore, può essere lasciato vuoto
  
 ####   ATTENZIONE
-Il valore di `config.startLine` potrebbe causare problemi a codici scritti avendo in mente un valore diverso, per questo dopo l'istruzione `END`si può usare l'istruzone `$LNSTRT x` per sovrascrivere il valore di `config.startLine` con il valore `x`  
+Il valore di `config.startLine` causerà problemi a codici scritti avendo in mente un valore diverso, per questo dopo l'istruzione `END`si può usare l'istruzone `$LNSTRT x` per sovrascrivere il valore di `config.startLine` con il valore `x`  
 
 Se `config.filename` viene lasciato vuoto (`''`) il programma chiederà quale dei file `*.code` presenti nella stessa directory aprire 
 
