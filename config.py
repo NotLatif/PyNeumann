@@ -1,4 +1,4 @@
-show_debug = True
+showDebug = True
 startLine = 0
 commentChar = '#'
 fileName = 'main.code'

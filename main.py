@@ -1,10 +1,6 @@
 # TODO
-# try casting and not casting int() when using arithmetics
-# aggiorna il file README
-# aggiungi impostazioni personalizzabili come istruzioni
-# eg.
-#   lnstrt x <- lineStart = x
-#
+# trova altra soluzione per var globali
+# aggiungi metodo per automatizzare l'input
 
 import config as cfg
 import glob, os
@@ -45,34 +41,34 @@ def load(x):
     incIst()
     global accumulatore
     global memoria
-    accumulatore = memoria[x]
+    accumulatore = memoria[int(x)]
 
 def store(x):
     incIst()
     global accumulatore
     global memoria
-    memoria[x] = accumulatore
+    memoria[int(x)] = accumulatore
 
 #arithmetic instructions
 def add(x):
     incIst()
     global accumulatore
-    accumulatore += memoria[x]
+    accumulatore += memoria[int(x)]
 
 def sub(x):
     incIst()
     global accumulatore
-    accumulatore -= memoria[x]
+    accumulatore -= memoria[int(x)]
 
 def mult(x):
     incIst()
     global accumulatore
-    accumulatore *= memoria[x]
+    accumulatore *= memoria[int(x)]
 
 def div(x):
     incIst()
     global accumulatore
-    accumulatore //= memoria[x]
+    accumulatore //= memoria[int(x)]
 
 def loadEq(x):
     incIst()
@@ -109,41 +105,41 @@ def beq(x): #BranchEQual (if [ACC] == 0)
     incIst()
     global linea
     if (accumulatore == 0):
-        linea = x
+        linea = int(x)
 
 def bge(x): #BranchGreaterEqual (if [ACC] >= 0)
     incIst()
     global linea
     if (accumulatore >= 0):
-        linea = x
+        linea = int(x)
 
 def bg(x): #BranchGreater (if [ACC] > 0)
     incIst()
     global linea
     if (accumulatore > 0):
-        linea = x
+        linea = int(x)
 
 def ble(x): #BranchLowerEqual (if [ACC] <= 0)
     incIst()
     global linea
     if (accumulatore <= 0):
-        linea = x
+        linea = int(x)
 
 def bl(x): #BranchLower (if [ACC] < 0)
     incIst()
     global linea
     if (accumulatore < 0):
-        linea = x
+        linea = int(x)
 
 def loadAt(x): #Load [x]
     incIst()
     pos = memoria[x]
-    load(x)
+    load(int(x))
 
 def storeAt(x): #Store [x]
     incIst()
     pos = memoria[x]
-    store(x)
+    store(int(x))
 
 
 #Script Start
@@ -160,7 +156,7 @@ if(__name__=='__main__'):
 
         print("Quale file vuoi aprire?")
         cfg.fileName = files[int(input("[int] > "))]
-    
+
     #init vars
     nastroScr = 0
     accumulatore = 0
@@ -175,11 +171,12 @@ if(__name__=='__main__'):
     with open(cfg.fileName) as f:
         rawCode = f.readlines()
 
+
     #separate code from arguments, and remove comments
     i = 0
     for word in rawCode:
-        word = word.split(cfg.commentChar, 1)[0] #remove comments
-        x = word.split() #split string for management
+        word = word.split(cfg.commentChar, 1)[0] #remove comments (word is string)
+        x = word.split() #split string for management (x is list)
 
         #store commands in dict {row:[cmd, arg]}
         if(x != []): #if row is not comment
@@ -189,9 +186,25 @@ if(__name__=='__main__'):
                 code[i] = [x[0].upper()] #[cmd]
 
         i+=1
-    
-    if(code[len(code)-1] != 'END'): #if end instruction is missing add one at the end
+    print(code)
+
+    hadLnstrt = 0
+    hadEnd = 1
+    for x in code:
+        if(code[x][0] == 'LNSTRT'):
+            cfg.startLine = int(code[x][1])
+            hadLnstrt = x
+        if(code[x][0] == 'END'):
+            hadEnd = 0
+
+    if(hadLnstrt): #if it had LNSTRT delete the dict key containing that instruction
+        del code[hadLnstrt]
+        del hadLnstrt
+
+    if(hadEnd): #if it had no END instruction add it at the end
         code[len(code)] = ['END']
+    
+    print(code)
 
     #execute
     while True: #for word in code
@@ -206,7 +219,7 @@ if(__name__=='__main__'):
             arg = None
 
         #debug
-        if(cfg.show_debug):
+        if(cfg.showDebug):
             print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+cfg.startLine}]')
             print(f'  [ACC]: {accumulatore}')
             print(f'  [MEM]: {memoria}')
@@ -256,8 +269,6 @@ if(__name__=='__main__'):
                 ble(arg-cfg.startLine)
             elif(cmd == 'BL'):
                 bl(arg-cfg.startLine)
-            elif(cmd == 'LNSTRT'):#misc
-                cfg.startLine = arg
             elif(cmd == 'END'):
                 break
             else:
