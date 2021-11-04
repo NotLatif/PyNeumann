@@ -1,7 +1,5 @@
 # TODO
-# trova altra soluzione per var globali
 # aggiungi metodo per automatizzare l'input
-
 import config as cfg
 import glob, os
 
@@ -15,132 +13,115 @@ class col:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
 
+class vars:
+    nIstruzioni = 0
+    accumulatore = 0
+    linea = 0
+
 #n of instructions counter
 def incIst():
-    global nIstruzioni
-    nIstruzioni += 1
+    vars.nIstruzioni += 1
 
 #i/o instructions
 def read():
     incIst()
-    global accumulatore
     inp = input(f'{col.CYAN}input > ')
     try:
-        accumulatore = int(inp)
+        vars.accumulatore = int(inp)
     except:
-        accumulatore = inp
+        vars.accumulatore = inp
     print(col.ENDC, end = '')
 
 def write():
     incIst()
-    nastroScr = accumulatore
+    nastroScr = vars.accumulatore
     print(f'{col.GREEN}output > {nastroScr}')
     print(col.ENDC, end = '')
 
 def load(x):
     incIst()
-    global accumulatore
-    global memoria
-    accumulatore = memoria[int(x)]
+    vars.accumulatore = memoria[int(x)]
 
 def store(x):
     incIst()
-    global accumulatore
-    global memoria
-    memoria[int(x)] = accumulatore
+    memoria[int(x)] = vars.accumulatore
 
 #arithmetic instructions
 def add(x):
     incIst()
-    global accumulatore
-    accumulatore += memoria[int(x)]
+    vars.accumulatore += memoria[int(x)]
 
 def sub(x):
     incIst()
-    global accumulatore
-    accumulatore -= memoria[int(x)]
+    vars.accumulatore -= memoria[int(x)]
 
 def mult(x):
     incIst()
-    global accumulatore
-    accumulatore *= memoria[int(x)]
+    vars.accumulatore *= memoria[int(x)]
 
 def div(x):
     incIst()
-    global accumulatore
-    accumulatore //= memoria[int(x)]
+    vars.accumulatore //= memoria[int(x)]
 
 def loadEq(x):
     incIst()
-    global accumulatore
-    accumulatore = x
+    vars.accumulatore = x
 
 def addEq(x):
     incIst()
-    global accumulatore
-    accumulatore += x
+    vars.accumulatore += x
 
 def subEq(x):
     incIst()
-    global accumulatore
-    accumulatore -= x
+    vars.accumulatore -= x
 
 def multEq(x):
     incIst()
-    global accumulatore
-    accumulatore *= x
+    vars.accumulatore *= x
 
 def divEq(x):
     incIst()
-    global accumulatore
-    accumulatore //= x
+    vars.accumulatore //= x
 
 #logic instructions
 def br(x): #BRanch (unconditioned)
     incIst()
-    global linea
-    linea = int(x)
+    vars.linea = int(x)
 
 def beq(x): #BranchEQual (if [ACC] == 0)
     incIst()
-    global linea
-    if (accumulatore == 0):
-        linea = int(x)
+    if (vars.accumulatore == 0):
+        vars.linea = int(x)
 
 def bge(x): #BranchGreaterEqual (if [ACC] >= 0)
     incIst()
-    global linea
-    if (accumulatore >= 0):
-        linea = int(x)
+    if (vars.accumulatore >= 0):
+        vars.linea = int(x)
 
 def bg(x): #BranchGreater (if [ACC] > 0)
     incIst()
-    global linea
-    if (accumulatore > 0):
-        linea = int(x)
+    if (vars.accumulatore > 0):
+        vars.linea = int(x)
 
 def ble(x): #BranchLowerEqual (if [ACC] <= 0)
     incIst()
-    global linea
-    if (accumulatore <= 0):
-        linea = int(x)
+    if (vars.accumulatore <= 0):
+        vars.linea = int(x)
 
 def bl(x): #BranchLower (if [ACC] < 0)
     incIst()
-    global linea
-    if (accumulatore < 0):
-        linea = int(x)
+    if (vars.accumulatore < 0):
+        vars.linea = int(x)
 
-def loadAt(x): #Load [x]
+def loadAt(x): #Load [memoria[x]]
     incIst()
-    pos = memoria[x]
-    load(int(x))
+    addr = memoria[x]
+    load(int(addr))
 
-def storeAt(x): #Store [x]
+def storeAt(x): #Store [memoria[x]]
     incIst()
-    pos = memoria[x]
-    store(int(x))
-
+    addr = memoria[x]
+    store(int(addr))
 
 #Script Start
 if(__name__=='__main__'):
@@ -159,12 +140,9 @@ if(__name__=='__main__'):
 
     #init vars
     nastroScr = 0
-    accumulatore = 0
     memoria = {}
-    linea = 0
     
     #system vars
-    nIstruzioni = 0
     rawCode = []
     code = {}
     #open and read code
@@ -186,7 +164,6 @@ if(__name__=='__main__'):
                 code[i] = [x[0].upper()] #[cmd]
 
         i+=1
-    print(code)
 
     hadLnstrt = 0
     hadEnd = 1
@@ -203,13 +180,11 @@ if(__name__=='__main__'):
 
     if(hadEnd): #if it had no END instruction add it at the end
         code[len(code)] = ['END']
-    
-    print(code)
 
     #execute
     while True: #for word in code
-        istr = linea
-        linea += 1
+        istr = vars.linea
+        vars.linea += 1
 
         cmd = code[istr][0] #command x
         try:
@@ -221,7 +196,7 @@ if(__name__=='__main__'):
         #debug
         if(cfg.showDebug):
             print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+cfg.startLine}]')
-            print(f'  [ACC]: {accumulatore}')
+            print(f'  [ACC]: {vars.accumulatore}')
             print(f'  [MEM]: {memoria}')
             print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
 
@@ -284,5 +259,5 @@ if(__name__=='__main__'):
 #print output
 print(' -- FINAL OUTPUT --')
 print(f'[MEM]: {memoria}')
-print(f'tot: {nIstruzioni} istruzioni {col.ENDC}')
-print(f'{col.HEADER}{col.BOLD}[ACC]: {accumulatore}{col.GREEN}{col.ENDC}\n')
+print(f'tot: {vars.nIstruzioni} istruzioni {col.ENDC}')
+print(f'{col.HEADER}{col.BOLD}[ACC]: {vars.accumulatore}{col.GREEN}{col.ENDC}\n')
