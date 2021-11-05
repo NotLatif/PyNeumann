@@ -1,5 +1,3 @@
-# TODO
-# aggiungi metodo per automatizzare l'input
 import config as cfg
 import glob, os, sys
 from colorama import init
@@ -293,6 +291,4 @@ if(not cfg.minimalOutput and cfg.outputFile != ''):
 elif(cfg.outputFile != ''):
 	with open(cfg.outputFile, "a") as f:
 		f.write(f'{vars.accumulatore}')
-
-
 sys.exit(1)
