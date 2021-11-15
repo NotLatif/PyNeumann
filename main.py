@@ -137,7 +137,6 @@ def storeAt(x): #Store [memoria[x]]
 
 #Script Start
 if(__name__=='__main__'):
-
 	files = []
 	if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
 		os.chdir("./")
@@ -276,7 +275,14 @@ if(__name__=='__main__'):
 			print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
 			print(f'    [MEM]: {memoria}')
 			print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-	
+			exit()
+		except ZeroDivisionError:
+			print(f'{col.FAIL}ERROR, Division by 0')
+			print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
+			print(f'    [MEM]: {memoria}')
+			print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+			exit()
+
 #print output
 print(' -- FINAL OUTPUT --')
 print(f'[MEM]: {memoria}')
