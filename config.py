@@ -1,6 +1,6 @@
 showDebug = True
 startLine = 0
-commentChar = '#'
+commentChar = ';'
 fileName = 'main.code'
 useFileInput = True
 inputFile = 'input.txt'
