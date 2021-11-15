@@ -232,9 +232,9 @@ if(__name__=='__main__'):
 			elif(cmd == 'STORE'): 
 				store(arg)
 			elif(cmd == 'LOAD@'):
-				loadAt(arg-cfg.startLine)
+				loadAt(arg)
 			elif(cmd == 'STORE@'):
-				storeAt(arg-cfg.startLine)
+				storeAt(arg)
 			elif(cmd == 'ADD'):#arithmetic
 				add(arg)
 			elif(cmd == 'SUB'):
@@ -271,7 +271,7 @@ if(__name__=='__main__'):
 				print(f'{col.FAIL}ERROR, command not found')
 				print(f'  ->"{cmd}"')
 				print(f'{col.BOLD}  row:{istr}{col.ENDC}')
-		except KeyError: #Could be triggered by: LOAD STORE LOAD@ STORE@
+		except KeyError: #Could be triggered by x in: LOAD x; STORE x; LOAD@ x; STORE@ x;
 			print(f'{col.FAIL}ERROR, address in memory does not exit')
 			print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
 			print(f'    [MEM]: {memoria}')
