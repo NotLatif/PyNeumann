@@ -3,6 +3,10 @@ import glob, os, sys
 from colorama import init
 init()
 
+"""TODO
+- Sistemare i file di esempio
+"""
+
 #colors
 class col:
 	HEADER = '\033[95m'
