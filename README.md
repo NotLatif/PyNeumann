@@ -1,6 +1,9 @@
 # PyNeumann
 Un simulatore della macchina di Von Neumann (made by NotLatif)
 
+## Requirements  
+[colorama](https://pypi.org/project/colorama/) `pip install colorama`
+
 ## La macchina di Von Neumann  
 La [macchina di Von Neumann](https://it.wikipedia.org/wiki/Architettura_di_von_Neumann) è costituita da quattro elementi fondamentali:
 
@@ -38,12 +41,15 @@ La [macchina di Von Neumann](https://it.wikipedia.org/wiki/Architettura_di_von_N
 #### Misc
 - `END`: definisce la fine del programma
 - `$LNSTRT x`: definisce il numero della prima riga di codice (va usato dopo l'istruzione `END`)
-- `#`: può essere usato in qualsiasi punto per definire un commento in riga (eg. LOAD= 0 #CARICA IL VALORE 0 NELL'ACCUMULATORE)
+- `;`: può essere usato in qualsiasi accanto alle istruzioni per definire un commento in riga (eg. LOAD= 0 ; CARICA IL VALORE 0 NELL'ACCUMULATORE)
 
 ## Funzionamento del codice
 
+##### `.code`
+.code è l'estensione che serve allo script per riconoscere un codice scritto nel linguaggio della macchina di Von Neumann
+
 ##### `main.py`
-Il programma principale: `main.py` apre il file `config.filename` e lo legge riga per riga eseguendo le istruzioni di Von Neumann senza badare di maiuscole e minuscole (non è case sensitive). Alla fine da come output il contentuto della memoria `[MEM]` in numero totale di istruzioni ed il contenuto dell'accumulatore `[ACC]`
+Il programma principale: `main.py` incropora le impostazioni contenute nel file `config.py` e apre il file contenuto nella varibaile `config.filename` (default: `main.code`) e lo legge riga per riga eseguendo le istruzioni di Von Neumann senza badare di maiuscole e minuscole (non è case sensitive). Alla fine da come output il contentuto della memoria `[MEM]` in numero totale di istruzioni ed il contenuto dell'accumulatore `[ACC]`
 
 ##### `config.py`
 Questo è il file di configurazione che contiene alcuni parametri modificabili dall'utente:
