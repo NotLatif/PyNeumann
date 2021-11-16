@@ -140,152 +140,151 @@ def storeAt(x): #Store [memoria[x]]
 	store(int(addr))
 
 #Script Start
-if(__name__=='__main__'):
-	files = []
-	if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
-		os.chdir("./")
-		x = 0
-		for file in glob.glob("*.code"):
-			files.append(file)
-			print(f"[{x}]{file}")
-			x+=1
+files = []
+if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
+	os.chdir("./")
+	x = 0
+	for file in glob.glob("*.code"):
+		files.append(file)
+		print(f"[{x}]{file}")
+		x+=1
 
-		print("Quale file vuoi aprire?")
-		cfg.fileName = files[int(input("[int] > "))]
+	print("Quale file vuoi aprire?")
+	cfg.fileName = files[int(input("[int] > "))]
 
-	if(cfg.useFileInput):
-		with open(cfg.inputFile) as f:
-			vars.fileInputStrings = f.read().splitlines()
+if(cfg.useFileInput):
+	with open(cfg.inputFile) as f:
+		vars.fileInputStrings = f.read().splitlines()
 
-	#init vars
-	nastroScr = 0
-	memoria = {}
-	
-	#system vars
-	rawCode = []
-	code = {}
-	#open and read code
-	with open(cfg.fileName) as f:
-		rawCode = f.readlines()
+#init vars
+nastroScr = 0
+memoria = {}
+
+#system vars
+rawCode = []
+code = {}
+#open and read code
+with open(cfg.fileName) as f:
+	rawCode = f.readlines()
 
 
-	#separate code from arguments, and remove comments
-	i = 0
-	for word in rawCode:
-		word = word.split(cfg.commentChar, 1)[0] #remove comments (word is string)
-		x = word.split() #split string for management (x is list)
+#separate code from arguments, and remove comments
+i = 0
+for word in rawCode:
+	word = word.split(cfg.commentChar, 1)[0] #remove comments (word is string)
+	x = word.split() #split string for management (x is list)
 
-		#store commands in dict {row:[cmd, arg]}
-		if(x != []): #if row is not comment
-			try: #has args
-				code[i] = [x[0].upper(), x[1]] #[cmd, arg]
-			except IndexError: #has no args
-				code[i] = [x[0].upper()] #[cmd]
-		i+=1
+	#store commands in dict {row:[cmd, arg]}
+	if(x != []): #if row is not comment
+		try: #has args
+			code[i] = [x[0].upper(), x[1]] #[cmd, arg]
+		except IndexError: #has no args
+			code[i] = [x[0].upper()] #[cmd]
+	i+=1
 
-	hadLnstrt = 0
-	hadEnd = 1
-	for x in code:
-		if(code[x][0] == 'LNSTRT'):
-			cfg.startLine = int(code[x][1])
-			hadLnstrt = x
-		if(code[x][0] == 'END'):
-			hadEnd = 0
+hadLnstrt = 0
+hadEnd = 1
+for x in code:
+	if(code[x][0] == 'LNSTRT'):
+		cfg.startLine = int(code[x][1])
+		hadLnstrt = x
+	if(code[x][0] == 'END'):
+		hadEnd = 0
 
-	if(hadLnstrt): #if it had LNSTRT delete the dict key containing that instruction
-		del code[hadLnstrt]
-		del hadLnstrt
+if(hadLnstrt): #if it had LNSTRT delete the dict key containing that instruction
+	del code[hadLnstrt]
+	del hadLnstrt
 
-	if(hadEnd): #if it had no END instruction add it at the end
-		code[len(code)] = ['END']
+if(hadEnd): #if it had no END instruction add it at the end
+	code[len(code)] = ['END']
 
-	#execute
-	while True: #for word in code
-		istr = vars.linea
-		vars.linea += 1
+#execute
+while True: #for word in code
+	istr = vars.linea
+	vars.linea += 1
 
-		cmd = code[istr][0] #command x
-		try:
-			arg = code[istr][1] #arg x
-			arg = int(arg)
-		except IndexError:
-			arg = None
+	cmd = code[istr][0] #command x
+	try:
+		arg = code[istr][1] #arg x
+		arg = int(arg)
+	except IndexError:
+		arg = None
 
-		#debug
-		if(cfg.showDebug):
-			print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+cfg.startLine}]')
-			print(f'  [ACC]: {vars.accumulatore}')
-			print(f'  [MEM]: {memoria}')
-			print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
-		if(not cfg.minimalOutput and cfg.outputFile != ''):
-			with open(cfg.outputFile, "a") as f:
-				f.write(f'[DEBUG]---------row:{istr}-------[{istr+cfg.startLine}]\n')
-				f.write(f'[ACC]: {vars.accumulatore}\n')
-				f.write(f'[MEM]: {memoria}\n')
-				f.write(f'cmd: {cmd}; arg: {arg}\n')
+	#debug
+	if(cfg.showDebug):
+		print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+cfg.startLine}]')
+		print(f'  [ACC]: {vars.accumulatore}')
+		print(f'  [MEM]: {memoria}')
+		print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
+	if(not cfg.minimalOutput and cfg.outputFile != ''):
+		with open(cfg.outputFile, "a") as f:
+			f.write(f'[DEBUG]---------row:{istr}-------[{istr+cfg.startLine}]\n')
+			f.write(f'[ACC]: {vars.accumulatore}\n')
+			f.write(f'[MEM]: {memoria}\n')
+			f.write(f'cmd: {cmd}; arg: {arg}\n')
 
-		#instructions
-		try:
-			if(cmd == 'READ'):#i/o
-				read()
-			elif(cmd == 'WRITE'):
-				write()
-			elif(cmd == 'LOAD'):#memory
-				load(arg)
-			elif(cmd == 'STORE'): 
-				store(arg)
-			elif(cmd == 'LOAD@'):
-				loadAt(arg)
-			elif(cmd == 'STORE@'):
-				storeAt(arg)
-			elif(cmd == 'ADD'):#arithmetic
-				add(arg)
-			elif(cmd == 'SUB'):
-				sub(arg)
-			elif(cmd == 'MULT'):
-				mult(arg)
-			elif(cmd == 'DIV'):
-				div(arg)
-			elif(cmd == 'LOAD='):
-				loadEq(arg)
-			elif(cmd == 'ADD='):
-				addEq(arg)
-			elif(cmd == 'SUB='):
-				subEq(arg)
-			elif(cmd == 'MULT='):
-				multEq(arg)
-			elif(cmd == 'DIV='):
-				divEq(arg)
-			elif(cmd == 'BR'):#logic
-				br(arg-cfg.startLine)
-			elif(cmd == 'BEQ'):
-				beq(arg-cfg.startLine)
-			elif(cmd == 'BGE'):
-				bge(arg-cfg.startLine)
-			elif(cmd == 'BG'):
-				bg(arg-cfg.startLine)
-			elif(cmd == 'BLE'):
-				ble(arg-cfg.startLine)
-			elif(cmd == 'BL'):
-				bl(arg-cfg.startLine)
-			elif(cmd == 'END'):
-				break
-			else:
-				print(f'{col.FAIL}ERROR, command not found')
-				print(f'  ->"{cmd}"')
-				print(f'{col.BOLD}  row:{istr}{col.ENDC}')
-		except KeyError: #Could be triggered by x in: LOAD x; STORE x; LOAD@ x; STORE@ x;
-			print(f'{col.FAIL}ERROR, address in memory does not exit')
-			print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
-			print(f'    [MEM]: {memoria}')
-			print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-			exit()
-		except ZeroDivisionError:
-			print(f'{col.FAIL}ERROR, Division by 0')
-			print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
-			print(f'    [MEM]: {memoria}')
-			print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-			exit()
+	#instructions
+	try:
+		if(cmd == 'READ'):#i/o
+			read()
+		elif(cmd == 'WRITE'):
+			write()
+		elif(cmd == 'LOAD'):#memory
+			load(arg)
+		elif(cmd == 'STORE'): 
+			store(arg)
+		elif(cmd == 'LOAD@'):
+			loadAt(arg)
+		elif(cmd == 'STORE@'):
+			storeAt(arg)
+		elif(cmd == 'ADD'):#arithmetic
+			add(arg)
+		elif(cmd == 'SUB'):
+			sub(arg)
+		elif(cmd == 'MULT'):
+			mult(arg)
+		elif(cmd == 'DIV'):
+			div(arg)
+		elif(cmd == 'LOAD='):
+			loadEq(arg)
+		elif(cmd == 'ADD='):
+			addEq(arg)
+		elif(cmd == 'SUB='):
+			subEq(arg)
+		elif(cmd == 'MULT='):
+			multEq(arg)
+		elif(cmd == 'DIV='):
+			divEq(arg)
+		elif(cmd == 'BR'):#logic
+			br(arg-cfg.startLine)
+		elif(cmd == 'BEQ'):
+			beq(arg-cfg.startLine)
+		elif(cmd == 'BGE'):
+			bge(arg-cfg.startLine)
+		elif(cmd == 'BG'):
+			bg(arg-cfg.startLine)
+		elif(cmd == 'BLE'):
+			ble(arg-cfg.startLine)
+		elif(cmd == 'BL'):
+			bl(arg-cfg.startLine)
+		elif(cmd == 'END'):
+			break
+		else:
+			print(f'{col.FAIL}ERROR, command not found')
+			print(f'  ->"{cmd}"')
+			print(f'{col.BOLD}  row:{istr}{col.ENDC}')
+	except KeyError: #Could be triggered by x in: LOAD x; STORE x; LOAD@ x; STORE@ x;
+		print(f'{col.FAIL}ERROR, address in memory does not exit')
+		print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
+		print(f'    [MEM]: {memoria}')
+		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+		exit()
+	except ZeroDivisionError:
+		print(f'{col.FAIL}ERROR, Division by 0')
+		print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
+		print(f'    [MEM]: {memoria}')
+		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+		exit()
 
 #print output
 print(' -- FINAL OUTPUT --')
