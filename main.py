@@ -149,6 +149,7 @@ if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to 
 		files.append(file)
 		print(f"[{x}]{file}")
 		x+=1
+	files.append(0)#COMBAK later
 	print(f"{col.CYAN}[{x}] Interprete live{col.ENDC}")
 	print("\nQuale file vuoi aprire?")
 	cfg.fileName = files[int(input("[int] > "))]
