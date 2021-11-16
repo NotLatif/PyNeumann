@@ -10,13 +10,13 @@ init()
 
 #colors
 class col:
-	HEADER = '\033[95m'
-	CYAN = '\033[96m'
-	GREEN = '\033[92m'
-	WARNING = '\033[93m'
-	FAIL = '\033[91m'
-	ENDC = '\033[0m'
-	BOLD = '\033[1m'
+	HEADER = '\033[95m' * cfg.colors
+	CYAN = '\033[96m' * cfg.colors
+	GREEN = '\033[92m' * cfg.colors
+	WARNING = '\033[93m' * cfg.colors
+	FAIL = '\033[91m' * cfg.colors
+	ENDC = '\033[0m' * cfg.colors
+	BOLD = '\033[1m' * cfg.colors
 
 class vars:
 	nIstruzioni = 0
@@ -156,6 +156,8 @@ if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to 
 if(cfg.useFileInput):
 	with open(cfg.inputFile) as f:
 		vars.fileInputStrings = f.read().splitlines()
+with open(cfg.outputFile, "w") as f:
+	f.write('')
 
 #init vars
 nastroScr = 0
@@ -213,13 +215,13 @@ while True: #for word in code
 
 	#debug
 	if(cfg.showDebug):
-		print(f'  [DEBUG]---------{col.BOLD}row:{istr}{col.ENDC}-------[{istr+cfg.startLine}]')
+		print(f'  [DEBUG]---------{col.BOLD}istr:{vars.nIstruzioni}{col.ENDC}-------[ln:{istr+cfg.startLine}]')
 		print(f'  [ACC]: {vars.accumulatore}')
 		print(f'  [MEM]: {memoria}')
 		print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
 	if(not cfg.minimalOutput and cfg.outputFile != ''):
 		with open(cfg.outputFile, "a") as f:
-			f.write(f'[DEBUG]---------row:{istr}-------[{istr+cfg.startLine}]\n')
+			f.write(f'[DEBUG]---------istr:{vars.nIstruzioni}-------[ln:{istr+cfg.startLine}]\n')
 			f.write(f'[ACC]: {vars.accumulatore}\n')
 			f.write(f'[MEM]: {memoria}\n')
 			f.write(f'cmd: {cmd}; arg: {arg}\n')
@@ -273,16 +275,16 @@ while True: #for word in code
 		else:
 			print(f'{col.FAIL}ERROR, command not found')
 			print(f'  ->"{cmd}"')
-			print(f'{col.BOLD}  row:{istr}{col.ENDC}')
+			print(f'{col.BOLD}  line:{istr+cfg.startLine}{col.ENDC}')
 	except KeyError: #Could be triggered by x in: LOAD x; STORE x; LOAD@ x; STORE@ x;
 		print(f'{col.FAIL}ERROR, address in memory does not exit')
-		print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
+		print(f'    AT LINE: {istr+cfg.startLine})')
 		print(f'    [MEM]: {memoria}')
 		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
 		exit()
 	except ZeroDivisionError:
 		print(f'{col.FAIL}ERROR, Division by 0')
-		print(f'    AT ROW: row:{istr} (line: {istr+cfg.startLine})')
+		print(f'    AT LINE: {istr+cfg.startLine})')
 		print(f'    [MEM]: {memoria}')
 		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
 		exit()
