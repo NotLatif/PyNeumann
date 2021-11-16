@@ -1,7 +1,7 @@
 showDebug = True
 startLine = 0
 commentChar = ';'
-fileName = 'main.code'
+fileName = ''
 useFileInput = False
 inputFile = 'input.txt'
 outputFile = 'output.txt'

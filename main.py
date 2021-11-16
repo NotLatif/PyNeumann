@@ -140,7 +140,7 @@ def storeAt(x): #Store [memoria[x]]
 	addr = memoria[x]
 	store(int(addr))
 
-#Script Start
+# --- Script Start ---
 files = []
 if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
 	os.chdir("./")
@@ -149,8 +149,8 @@ if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to 
 		files.append(file)
 		print(f"[{x}]{file}")
 		x+=1
-
-	print("Quale file vuoi aprire?")
+	print(f"{col.CYAN}[{x}] Interprete live{col.ENDC}")
+	print("\nQuale file vuoi aprire?")
 	cfg.fileName = files[int(input("[int] > "))]
 
 if(cfg.useFileInput):
