@@ -5,6 +5,7 @@ init()
 
 """TODO
 - Sistemare i file di esempio
+- Interprete live (python-style)
 """
 
 #colors
