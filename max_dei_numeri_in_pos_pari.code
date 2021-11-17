@@ -18,3 +18,4 @@ br 5
 load 1
 write
 end
+lnstrt 0

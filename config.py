@@ -1,5 +1,5 @@
 showDebug = True
-startLine = 0
+startLine = 1
 commentChar = ';'
 fileName = ''
 useFileInput = False
