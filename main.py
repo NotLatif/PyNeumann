@@ -153,7 +153,21 @@ if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to 
 	print("Quale file vuoi aprire?")
 	cfg.fileName = files[int(input("[int] > "))]
 
+<<<<<<< Updated upstream
 if(cfg.useFileInput):
+=======
+	print("\nQuale file vuoi aprire?")	#Query user for file input !
+	res = int(input("[int] > "))
+	
+	if(res == len(files)-1): #Live interpreter
+		live = True
+		cfg.startLine = 0
+		#print('Live interpreter settings:') COMBAK
+	else: #.code file
+		cfg.fileName = files[res]
+
+if(cfg.useFileInput and live): #toggles stdin from file/user input
+>>>>>>> Stashed changes
 	with open(cfg.inputFile) as f:
 		vars.fileInputStrings = f.read().splitlines()
 with open(cfg.outputFile, "w") as f:
