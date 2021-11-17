@@ -12,6 +12,25 @@ La [macchina di Von Neumann](https://it.wikipedia.org/wiki/Architettura_di_von_N
 - le periferiche (interfaccia I/O)
 - il bus di sistema
 
+## Utilizzo dello script  
+Di seguito elencati ci sono le informazioni principali da sapere per iniziare ad usare il simulatore, per altri dettagli guarda la sezione [Funzionamento del codice](#funzionamento-del-codice)  
+
+- il file `start.py` è lo script che va eseguito per leggere le istruzioni
+---
+- il file `config.py` contiene delle variabili modificabili dall'utente
+- - `colors` se False disattiva i colori (usalo se il tuo terminale non è compatibile)
+- - `startLine` definisce il valore da prendere come prima linea (usa 1 se il tuo editor di testo conta le linee a partire da 1)  
+---
+- il file `main.code` è il file default da cui vengono lette le istruzioni
+- - si può scegliere un file diverso cambiando il valore di `config.fileName`
+- - se `config.fileName` non ha un valore l'interprete chiederà quale file si vuole eseguire (con l'opzione di scrivere le istruzioni in "live")
+---
+- il file `input.txt` può essere riempito con un valore per riga
+- - la prima riga corrisponde al primo `READ`; la seconda rica al secondo `READ` e così via
+- il file `output.txt` conterrà il log di ciò che ha fatto lo script
+- - ATTENZIONE: il file `output.txt` viene resettato ad ogni avvio dello scripts
+- - il valore `minimalOutput` se vero, salva sul file solo il valore finale dell'accumulatore
+
 ## Le istruzioni
  #### I/O
 - `READ`: legge dal nastro di input
