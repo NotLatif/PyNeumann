@@ -141,7 +141,7 @@ def storeAt(x): #Store [memoria[x]]
 	store(int(addr))
 
 # --- Script Start ---
-files = []
+files = [] #Stores .code dirs
 if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
 	os.chdir("./")
 	x = 0
@@ -149,15 +149,22 @@ if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to 
 		files.append(file)
 		print(f"[{x}]{file}")
 		x+=1
-	files.append(0)#COMBAK later
-	print(f"{col.CYAN}[{x}] Interprete live{col.ENDC}")
-	print("\nQuale file vuoi aprire?")
-	cfg.fileName = files[int(input("[int] > "))]
 
-if(cfg.useFileInput):
+	files.append(0) #Last option is live interpreter
+	print(f"{col.CYAN}[{x}] Interprete live{col.ENDC}")
+
+	print("\nQuale file vuoi aprire?")
+	res = input("[int] > ")
+	if(res == files[len(files)-1]): #Live interpreter
+		live = True
+	else: #.code file
+		cfg.fileName = files[int()]
+
+if(cfg.useFileInput and live): #toggles stdin from file/user input
 	with open(cfg.inputFile) as f:
 		vars.fileInputStrings = f.read().splitlines()
-with open(cfg.outputFile, "w") as f:
+
+with open(cfg.outputFile, "w") as f: #Resets output file
 	f.write('')
 
 #init vars
@@ -165,8 +172,9 @@ nastroScr = 0
 memoria = {}
 
 #system vars
-rawCode = []
-code = {}
+rawCode = [] #to be parsed
+code = {}	#structure:	code{x: [istr, val]}	(val has int casts for specific use cases)
+			#es:	code{0: ['LOAD', '1']}		(eg. mem addr can't be string)
 #open and read code
 with open(cfg.fileName) as f:
 	rawCode = f.readlines()
@@ -201,6 +209,8 @@ if(hadLnstrt): #if it had LNSTRT delete the dict key containing that instruction
 
 if(hadEnd): #if it had no END instruction add it at the end
 	code[len(code)] = ['END']
+
+print(code)
 
 #execute
 while True: #for word in code
