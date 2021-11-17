@@ -5,7 +5,7 @@ init()
 
 """TODO
 - Sistemare i file di esempio
-- Interprete live (python-style)
+- Migliorare e testare l'interprete live
 """
 
 #colors
@@ -140,8 +140,16 @@ def storeAt(x): #Store [memoria[x]]
 	addr = memoria[x]
 	store(int(addr))
 
+
+def parseLine(line):
+	line = line.split(cfg.commentChar, 1)[0] #remove comments (line is string)
+	x = line.split() #split string for management (x is list)
+	return x
+
 # --- Script Start ---
 files = [] #Stores .code dirs
+live = False #toggles live interpreter
+
 if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
 	os.chdir("./")
 	x = 0
@@ -153,10 +161,12 @@ if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to 
 	files.append(0) #Last option is live interpreter
 	print(f"{col.CYAN}[{x}] Interprete live{col.ENDC}")
 
-	print("\nQuale file vuoi aprire?")
-	res = input("[int] > ")
-	if(res == files[len(files)-1]): #Live interpreter
+	print("\nQuale file vuoi aprire?")	#Query user for file input !
+	res = int(input("[int] > "))
+	
+	if(res == len(files)-1): #Live interpreter
 		live = True
+		#print('Live interpreter settings:') COMBAK
 	else: #.code file
 		cfg.fileName = files[int()]
 
@@ -168,54 +178,57 @@ with open(cfg.outputFile, "w") as f: #Resets output file
 	f.write('')
 
 #init vars
-nastroScr = 0
-memoria = {}
+nastroScr = 0 #stdin
+memoria = {}  #ram structure:	memoria{addr: val}
 
 #system vars
 rawCode = [] #to be parsed
 code = {}	#structure:	code{x: [istr, val]}	(val has int casts for specific use cases)
 			#es:	code{0: ['LOAD', '1']}		(eg. mem addr can't be string)
-#open and read code
-with open(cfg.fileName) as f:
-	rawCode = f.readlines()
 
+if not live: #if not live -> parse .code file
+	#open and read istructions
+	with open(cfg.fileName) as f:
+		rawCode = f.readlines()
 
-#separate code from arguments, and remove comments
-i = 0
-for word in rawCode:
-	word = word.split(cfg.commentChar, 1)[0] #remove comments (word is string)
-	x = word.split() #split string for management (x is list)
+	#separate istructions from arguments, and remove comments
+	i = 0
+	for line in rawCode:
 
-	#store commands in dict {row:[cmd, arg]}
-	if(x != []): #if row is not comment
-		try: #has args
-			code[i] = [x[0].upper(), x[1]] #[cmd, arg]
-		except IndexError: #has no args
-			code[i] = [x[0].upper()] #[cmd]
-	i+=1
+		x = parseLine(line) #x is list (eg. x -> ['load=', '120'])
 
-hadLnstrt = 0
-hadEnd = 1
-for x in code:
-	if(code[x][0] == 'LNSTRT'):
-		cfg.startLine = int(code[x][1])
-		hadLnstrt = x
-	if(code[x][0] == 'END'):
-		hadEnd = 0
+		#store commands in dict {row:[cmd, arg]} row always starts at 0
+		if(x != []): #if row is not comment
+			try: #has args
+				code[i] = [x[0].upper(), x[1]] #[cmd, arg]
+			except IndexError: #has no args
+				code[i] = [x[0].upper()] #[cmd]
+		i+=1
 
-if(hadLnstrt): #if it had LNSTRT delete the dict key containing that instruction
-	del code[hadLnstrt]
-	del hadLnstrt
+	hadLnstrt = 0
+	hadEnd = 1
+	for x in code:
+		if(code[x][0] == 'LNSTRT'):
+			cfg.startLine = int(code[x][1])
+			hadLnstrt = x
+		if(code[x][0] == 'END'):
+			hadEnd = 0
 
-if(hadEnd): #if it had no END instruction add it at the end
-	code[len(code)] = ['END']
+	if(hadLnstrt): #if it had LNSTRT delete the dict key containing that instruction
+		del code[hadLnstrt]
+		del hadLnstrt
 
-print(code)
+	if(hadEnd): #if it had no END instruction add it at the end
+		code[len(code)] = ['END']
+
 
 #execute
 while True: #for word in code
 	istr = vars.linea
 	vars.linea += 1
+
+	if live:
+		code[istr] = parseLine(input('[ISTR] > '))
 
 	cmd = code[istr][0] #command x
 	try:
@@ -223,6 +236,7 @@ while True: #for word in code
 		arg = int(arg)
 	except IndexError:
 		arg = None
+
 
 	#debug
 	if(cfg.showDebug):
@@ -289,16 +303,31 @@ while True: #for word in code
 			print(f'{col.BOLD}  line:{istr+cfg.startLine}{col.ENDC}')
 	except KeyError: #Could be triggered by x in: LOAD x; STORE x; LOAD@ x; STORE@ x;
 		print(f'{col.FAIL}ERROR, address in memory does not exit')
-		print(f'    AT LINE: {istr+cfg.startLine})')
+		print(f'    AT LINE: {istr+cfg.startLine}')
 		print(f'    [MEM]: {memoria}')
 		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-		exit()
+		if not live:
+			exit()
 	except ZeroDivisionError:
 		print(f'{col.FAIL}ERROR, Division by 0')
-		print(f'    AT LINE: {istr+cfg.startLine})')
+		print(f'    AT LINE: {istr+cfg.startLine}')
 		print(f'    [MEM]: {memoria}')
 		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-		exit()
+		if not live:
+			exit()
+	except TypeError:
+		print(f'{col.FAIL}ERROR, (probable) InputError')
+		print(f"    L'argomento inserito non è valido!")
+		print(f'    AT LINE: {istr+cfg.startLine}')
+		print(f'    [ACC]: {vars.accumulatore}')
+		print(f'    [MEM]: {memoria}')
+		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+		if not live:
+			exit()
+		#else
+		print(f"{col.WARNING}l'ultima istruzione sarà ignorata, riscrivila correttamente.{col.ENDC}")
+		vars.linea -= 1
+
 
 #print output
 print(' -- FINAL OUTPUT --')
