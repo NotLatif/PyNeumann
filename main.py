@@ -228,7 +228,7 @@ while True: #for word in code
 	vars.linea += 1
 
 	if live:
-		code[istr] = parseLine(input('[ISTR] > '))
+		code[istr] = parseLine(input(f'{col.BOLD}{col.GREEN}[ISTR {col.WARNING}ln: {vars.linea-1} | ACC: {vars.accumulatore}{col.GREEN}]{col.ENDC} > '))
 
 	cmd = code[istr][0] #command x
 	try:
