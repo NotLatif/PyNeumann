@@ -6,6 +6,7 @@ init()
 """TODO
 - Sistemare i file di esempio
 - Migliorare e testare l'interprete live
+- live non mostra subito la variazione della memoria
 """
 
 #colors
@@ -295,7 +296,7 @@ while True: #for word in code
 			ble(arg-cfg.startLine)
 		elif(cmd == 'BL'):
 			bl(arg-cfg.startLine)
-		elif(cmd == 'END'):
+		elif (cmd == 'END'):
 			break
 		else:
 			print(f'{col.FAIL}ERROR, command not found')
@@ -327,6 +328,8 @@ while True: #for word in code
 		#else
 		print(f"{col.WARNING}l'ultima istruzione sarà ignorata, riscrivila correttamente.{col.ENDC}")
 		vars.linea -= 1
+	#except ValueError:
+		#TODO eg. LOAD a
 
 
 #print output
