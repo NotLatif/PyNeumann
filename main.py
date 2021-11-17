@@ -168,7 +168,7 @@ if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to 
 		live = True
 		#print('Live interpreter settings:') COMBAK
 	else: #.code file
-		cfg.fileName = files[int()]
+		cfg.fileName = files[res]
 
 if(cfg.useFileInput and live): #toggles stdin from file/user input
 	with open(cfg.inputFile) as f:
