@@ -4,7 +4,7 @@ from colorama import init
 init()
 
 """TODO
-- Aggiungere istruzioni per utilizzo da linea di comando
+- implementare utilizzo da linea di comando
 - Sistemare i file di esempio
 - I DEBUG di READ e WRITE vengono stampato dopo 
 		aver eseguito l'istruzione (come tutte, ma potrebbe confondere)
