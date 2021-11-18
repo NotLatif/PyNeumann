@@ -4,9 +4,11 @@ from colorama import init
 init()
 
 """TODO
+- Aggiungere istruzioni per utilizzo da linea di comando
 - Sistemare i file di esempio
 - Migliorare e testare l'interprete live
-- live non mostra subito la variazione della memoria
+- I DEBUG di READ e WRITE vengono stampato dopo 
+		aver eseguito l'istruzione (come tutte, ma potrebbe confondere)
 """
 
 #colors
@@ -198,12 +200,12 @@ if not live: #if not live -> parse .code file
 
 		x = parseLine(line) #x is list (eg. x -> ['load=', '120'])
 
-		#store commands in dict {row:[cmd, arg]} row always starts at 0
+		#store commands in dict {row:[istr, arg]} row always starts at 0
 		if(x != []): #if row is not comment
 			try: #has args
-				code[i] = [x[0].upper(), x[1]] #[cmd, arg]
+				code[i] = [x[0].upper(), x[1]] #[istr, arg]
 			except IndexError: #has no args
-				code[i] = [x[0].upper()] #[cmd]
+				code[i] = [x[0].upper()] #[istr]
 		i+=1
 
 	hadLnstrt = 0
@@ -224,105 +226,96 @@ if not live: #if not live -> parse .code file
 
 
 #execute
-while True: #for word in code
-	istr = vars.linea
+while True: #until END instruction
+	istrLn = vars.linea #si riferisce all'istruzione in linea vars.linea
 	vars.linea += 1
 
-	if live:
-		code[istr] = parseLine(input(f'{col.BOLD}{col.GREEN}[ISTR {col.WARNING}ln: {vars.linea-1} | ACC: {vars.accumulatore}{col.GREEN}]{col.ENDC} > '))
+	if live:					#[ISTR ln: linea-1 | ACC: acc]
+		code[istrLn] = parseLine(input(f'{col.BOLD}{col.GREEN}[ISTR {col.WARNING}ln: {istrLn} | ACC: {vars.accumulatore}{col.GREEN}]{col.ENDC} > '))
 
-	cmd = code[istr][0] #command x
 	try:
-		arg = code[istr][1] #arg x
+		istr = code[istrLn][0] #command x
+	except IndexError:
+		istr = None
+
+	try:
+		arg = code[istrLn][1] #arg x
 		arg = int(arg)
 	except IndexError:
 		arg = None
 
 
-	#debug
-	if(cfg.showDebug):
-		print(f'  [DEBUG]---------{col.BOLD}istr:{vars.nIstruzioni}{col.ENDC}-------[ln:{istr+cfg.startLine}]')
-		print(f'  [ACC]: {vars.accumulatore}')
-		print(f'  [MEM]: {memoria}')
-		print(f'  cmd:{col.WARNING} {cmd}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
-	if(not cfg.minimalOutput and cfg.outputFile != ''):
-		with open(cfg.outputFile, "a") as f:
-			f.write(f'[DEBUG]---------istr:{vars.nIstruzioni}-------[ln:{istr+cfg.startLine}]\n')
-			f.write(f'[ACC]: {vars.accumulatore}\n')
-			f.write(f'[MEM]: {memoria}\n')
-			f.write(f'cmd: {cmd}; arg: {arg}\n')
-
 	#instructions
 	try:
-		if(cmd == 'READ'):#i/o
+		if(istr == 'READ'):#i/o
 			read()
-		elif(cmd == 'WRITE'):
+		elif(istr == 'WRITE'):
 			write()
-		elif(cmd == 'LOAD'):#memory
+		elif(istr == 'LOAD'):#memory
 			load(arg)
-		elif(cmd == 'STORE'): 
+		elif(istr == 'STORE'): 
 			store(arg)
-		elif(cmd == 'LOAD@'):
+		elif(istr == 'LOAD@'):
 			loadAt(arg)
-		elif(cmd == 'STORE@'):
+		elif(istr == 'STORE@'):
 			storeAt(arg)
-		elif(cmd == 'ADD'):#arithmetic
+		elif(istr == 'ADD'):#arithmetic
 			add(arg)
-		elif(cmd == 'SUB'):
+		elif(istr == 'SUB'):
 			sub(arg)
-		elif(cmd == 'MULT'):
+		elif(istr == 'MULT'):
 			mult(arg)
-		elif(cmd == 'DIV'):
+		elif(istr == 'DIV'):
 			div(arg)
-		elif(cmd == 'LOAD='):
+		elif(istr == 'LOAD='):
 			loadEq(arg)
-		elif(cmd == 'ADD='):
+		elif(istr == 'ADD='):
 			addEq(arg)
-		elif(cmd == 'SUB='):
+		elif(istr == 'SUB='):
 			subEq(arg)
-		elif(cmd == 'MULT='):
+		elif(istr == 'MULT='):
 			multEq(arg)
-		elif(cmd == 'DIV='):
+		elif(istr == 'DIV='):
 			divEq(arg)
-		elif(cmd == 'BR'):#logic
+		elif(istr == 'BR'):#logic
 			br(arg-cfg.startLine)
-		elif(cmd == 'BEQ'):
+		elif(istr == 'BEQ'):
 			beq(arg-cfg.startLine)
-		elif(cmd == 'BGE'):
+		elif(istr == 'BGE'):
 			bge(arg-cfg.startLine)
-		elif(cmd == 'BG'):
+		elif(istr == 'BG'):
 			bg(arg-cfg.startLine)
-		elif(cmd == 'BLE'):
+		elif(istr == 'BLE'):
 			ble(arg-cfg.startLine)
-		elif(cmd == 'BL'):
+		elif(istr == 'BL'):
 			bl(arg-cfg.startLine)
-		elif (cmd == 'END'):
+		elif (istr == 'END'):
 			break
 		else:
 			print(f'{col.FAIL}ERROR, command not found')
-			print(f'  ->"{cmd}"')
-			print(f'{col.BOLD}  line:{istr+cfg.startLine}{col.ENDC}')
+			print(f'  ->"{istr}"')
+			print(f'{col.BOLD}  line:{istrLn+cfg.startLine}{col.ENDC}')
 	except KeyError: #Could be triggered by x in: LOAD x; STORE x; LOAD@ x; STORE@ x;
 		print(f'{col.FAIL}ERROR, address in memory does not exit')
-		print(f'    AT LINE: {istr+cfg.startLine}')
+		print(f'    AT LINE: {istrLn+cfg.startLine}')
 		print(f'    [MEM]: {memoria}')
-		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
 		if not live:
 			exit()
 	except ZeroDivisionError:
 		print(f'{col.FAIL}ERROR, Division by 0')
-		print(f'    AT LINE: {istr+cfg.startLine}')
+		print(f'    AT LINE: {istrLn+cfg.startLine}')
 		print(f'    [MEM]: {memoria}')
-		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
 		if not live:
 			exit()
 	except TypeError:
 		print(f'{col.FAIL}ERROR, (probable) InputError')
 		print(f"    L'argomento inserito non è valido!")
-		print(f'    AT LINE: {istr+cfg.startLine}')
+		print(f'    AT LINE: {istrLn+cfg.startLine}')
 		print(f'    [ACC]: {vars.accumulatore}')
 		print(f'    [MEM]: {memoria}')
-		print(f'    cmd -> cmd:{col.WARNING} {cmd}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
 		if not live:
 			exit()
 		#else
@@ -330,6 +323,19 @@ while True: #for word in code
 		vars.linea -= 1
 	#except ValueError:
 		#TODO eg. LOAD a
+	
+	#debug
+	if(cfg.showDebug):
+		print(f'  [DEBUG]---------{col.BOLD}istr:{vars.nIstruzioni}{col.ENDC}-------[ln:{istrLn+cfg.startLine}]')
+		print(f'  [ACC]: {vars.accumulatore}')
+		print(f'  [MEM]: {memoria}')
+		print(f'  istr:{col.WARNING} {istr}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
+	if(not cfg.minimalOutput and cfg.outputFile != ''):
+		with open(cfg.outputFile, "a") as f:
+			f.write(f'[DEBUG]---------istr:{vars.nIstruzioni}-------[ln:{istrLn+cfg.startLine}]\n')
+			f.write(f'[ACC]: {vars.accumulatore}\n')
+			f.write(f'[MEM]: {memoria}\n')
+			f.write(f'istr: {istr}; arg: {arg}\n')
 
 
 #print output
