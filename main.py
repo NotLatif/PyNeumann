@@ -6,7 +6,6 @@ init()
 """TODO
 - Aggiungere istruzioni per utilizzo da linea di comando
 - Sistemare i file di esempio
-- Migliorare e testare l'interprete live
 - I DEBUG di READ e WRITE vengono stampato dopo 
 		aver eseguito l'istruzione (come tutte, ma potrebbe confondere)
 """
@@ -241,9 +240,17 @@ while True: #until END instruction
 	try:
 		arg = code[istrLn][1] #arg x
 		arg = int(arg)
-	except IndexError:
+	except IndexError: # arg does not exist
 		arg = None
+	except ValueError: # arg is not a number
+		arg = arg
 
+	def exceptionCatch(): # handles exceptions below
+		if live:
+			print(f"{col.WARNING}l'ultima istruzione sarà ignorata, riscrivila correttamente.{col.ENDC}")
+			vars.linea -= 1
+		else:
+			exit()
 
 	#instructions
 	try:
@@ -290,39 +297,44 @@ while True: #until END instruction
 		elif(istr == 'BL'):
 			bl(arg-cfg.startLine)
 		elif (istr == 'END'):
-			break
+			break #exits 'while True'
 		else:
 			print(f'{col.FAIL}ERROR, command not found')
 			print(f'  ->"{istr}"')
 			print(f'{col.BOLD}  line:{istrLn+cfg.startLine}{col.ENDC}')
+
 	except KeyError: #Could be triggered by x in: LOAD x; STORE x; LOAD@ x; STORE@ x;
 		print(f'{col.FAIL}ERROR, address in memory does not exit')
 		print(f'    AT LINE: {istrLn+cfg.startLine}')
 		print(f'    [MEM]: {memoria}')
 		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-		if not live:
-			exit()
+		exceptionCatch()
+
 	except ZeroDivisionError:
 		print(f'{col.FAIL}ERROR, Division by 0')
 		print(f'    AT LINE: {istrLn+cfg.startLine}')
 		print(f'    [MEM]: {memoria}')
 		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-		if not live:
-			exit()
+		exceptionCatch()
+
 	except TypeError:
-		print(f'{col.FAIL}ERROR, (probable) InputError')
+		print(f'{col.FAIL}ERROR, (probabile) InputError')
+		print(f"    L'input inserito non è valido!")
+		print(f'    AT LINE: {istrLn+cfg.startLine}')
+		print(f'    [ACC]: {vars.accumulatore}')
+		print(f'    [MEM]: {memoria}')
+		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
+		exceptionCatch()
+		
+	except ValueError:
+		print(f'{col.FAIL}ERROR, (probabile) Invalid Argument')
 		print(f"    L'argomento inserito non è valido!")
 		print(f'    AT LINE: {istrLn+cfg.startLine}')
 		print(f'    [ACC]: {vars.accumulatore}')
 		print(f'    [MEM]: {memoria}')
 		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
-		if not live:
-			exit()
-		#else
-		print(f"{col.WARNING}l'ultima istruzione sarà ignorata, riscrivila correttamente.{col.ENDC}")
-		vars.linea -= 1
-	#except ValueError:
-		#TODO eg. LOAD a
+		exceptionCatch()
+		
 	
 	#debug
 	if(cfg.showDebug):
