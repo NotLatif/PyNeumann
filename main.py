@@ -6,8 +6,7 @@ init()
 """TODO
 - implementare utilizzo da linea di comando
 - Sistemare i file di esempio
-- I DEBUG di READ e WRITE vengono stampato dopo 
-		aver eseguito l'istruzione (come tutte, ma potrebbe confondere)
+- Esistono 2 funzioni dentro il mainloop (funziona ma meglio cambiare)
 """
 
 #colors
@@ -142,7 +141,7 @@ def storeAt(x): #Store [memoria[x]]
 	addr = memoria[x]
 	store(int(addr))
 
-
+#script-related
 def parseLine(line):
 	line = line.split(cfg.commentChar, 1)[0] #remove comments (line is string)
 	x = line.split() #split string for management (x is list)
@@ -224,7 +223,7 @@ if not live: #if not live -> parse .code file
 		code[len(code)] = ['END']
 
 
-#execute
+#mainloop
 while True: #until END instruction
 	istrLn = vars.linea #si riferisce all'istruzione in linea vars.linea
 	vars.linea += 1
@@ -251,7 +250,21 @@ while True: #until END instruction
 			vars.linea -= 1
 		else:
 			exit()
-
+	def printDebug():
+		if(cfg.showDebug):
+			print(f'  [DEBUG]---------{col.BOLD}istr:{vars.nIstruzioni}{col.ENDC}-------[ln:{istrLn+cfg.startLine}]')
+			print(f'  [ACC]: {vars.accumulatore}')
+			print(f'  [MEM]: {memoria}')
+			print(f'  istr:{col.WARNING} {istr}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
+		if(not cfg.minimalOutput and cfg.outputFile != ''):
+			with open(cfg.outputFile, "a") as f:
+				f.write(f'[DEBUG]---------istr:{vars.nIstruzioni}-------[ln:{istrLn+cfg.startLine}]\n')
+				f.write(f'[ACC]: {vars.accumulatore}\n')
+				f.write(f'[MEM]: {memoria}\n')
+				f.write(f'istr: {istr}; arg: {arg}\n')
+	
+	if(istr == 'READ' or istr == 'WRITE'): #prints debug before READ||WRITE instruction (to avoid confusion)
+		printDebug()
 	#instructions
 	try:
 		if(istr == 'READ'):#i/o
@@ -336,18 +349,9 @@ while True: #until END instruction
 		exceptionCatch()
 		
 	
-	#debug
-	if(cfg.showDebug):
-		print(f'  [DEBUG]---------{col.BOLD}istr:{vars.nIstruzioni}{col.ENDC}-------[ln:{istrLn+cfg.startLine}]')
-		print(f'  [ACC]: {vars.accumulatore}')
-		print(f'  [MEM]: {memoria}')
-		print(f'  istr:{col.WARNING} {istr}{col.ENDC}; arg:{col.WARNING} {arg}{col.ENDC}')
-	if(not cfg.minimalOutput and cfg.outputFile != ''):
-		with open(cfg.outputFile, "a") as f:
-			f.write(f'[DEBUG]---------istr:{vars.nIstruzioni}-------[ln:{istrLn+cfg.startLine}]\n')
-			f.write(f'[ACC]: {vars.accumulatore}\n')
-			f.write(f'[MEM]: {memoria}\n')
-			f.write(f'istr: {istr}; arg: {arg}\n')
+	#prints debug after instruction if istr is not READ or WRITE (to avoid confusion with instructions like STORE)
+	if not(istr == 'READ' or istr == 'WRITE'):
+		printDebug()
 
 
 #print output
