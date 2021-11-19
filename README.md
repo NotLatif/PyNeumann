@@ -80,6 +80,7 @@ Questo è il file di configurazione che contiene alcuni parametri modificabili d
 - `inputFile` (`string`) -> Il nome del file da cui possono venir letti gli input se viene impostato `useFileInput = True`. Gli input vanno scritti nel file `inputFile` uno per riga
 - `outputFile` (`string`) -> È il file su cui viene salvato il risultato delle operazioni (debug compreso), lascia vuoto se non vuoi un output su file
 - `minimalOutput` (`bool`) -> Se impostato su True, salverà nel file `outputFile` solamente il valore dell'accumulatore
+- `colors` (`bool`) -> Se True, aggiunge un po' di colore allo scipt
  
 ###   ATTENZIONE
 Il valore di `config.startLine` causerà problemi a codici scritti avendo in mente un valore diverso, per questo dopo l'istruzione `END`si può usare l'istruzone `$LNSTRT x` per sovrascrivere il valore di `config.startLine` con il valore `x`  
