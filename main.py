@@ -1,5 +1,5 @@
 import config as cfg
-import glob, os, sys
+import glob, sys
 from colorama import init
 init()
 
@@ -156,7 +156,7 @@ files = [] #Stores .code dirs
 live = False #toggles live interpreter
 
 if(cfg.fileName == ''): #if fileName is blank: look for *.code and ask which to open
-	os.chdir("./")
+	
 	x = 0
 	for file in glob.glob("*.code"):
 		files.append(file)
