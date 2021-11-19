@@ -4,9 +4,7 @@ from colorama import init
 init()
 
 """TODO
-- implementare utilizzo da linea di comando
 - Sistemare i file di esempio
-- Esistono 2 funzioni dentro il mainloop (funziona ma meglio cambiare)
 """
 
 #colors
@@ -146,6 +144,12 @@ def parseLine(line):
 	line = line.split(cfg.commentChar, 1)[0] #remove comments (line is string)
 	x = line.split() #split string for management (x is list)
 	return x
+def exceptionCatch(): # handles exceptions below
+		if live:
+			print(f"{col.WARNING}l'ultima istruzione sarà ignorata, riscrivila correttamente.{col.ENDC}")
+			vars.linea -= 1
+		else:
+			exit()
 
 # --- Script Start ---
 files = [] #Stores .code dirs
@@ -230,7 +234,8 @@ while True: #until END instruction
 
 	if live:					#[ISTR ln: linea-1 | ACC: acc]
 		code[istrLn] = parseLine(input(f'{col.BOLD}{col.GREEN}[ISTR {col.WARNING}ln: {istrLn} | ACC: {vars.accumulatore}{col.GREEN}]{col.ENDC} > '))
-
+		code[istrLn][0] = code[istrLn][0].upper()
+	
 	try:
 		istr = code[istrLn][0] #command x
 	except IndexError:
@@ -244,12 +249,6 @@ while True: #until END instruction
 	except ValueError: # arg is not a number
 		arg = arg
 
-	def exceptionCatch(): # handles exceptions below
-		if live:
-			print(f"{col.WARNING}l'ultima istruzione sarà ignorata, riscrivila correttamente.{col.ENDC}")
-			vars.linea -= 1
-		else:
-			exit()
 	def printDebug():
 		if(cfg.showDebug):
 			print(f'  [DEBUG]---------{col.BOLD}istr:{vars.nIstruzioni}{col.ENDC}-------[ln:{istrLn+cfg.startLine}]')
@@ -262,8 +261,8 @@ while True: #until END instruction
 				f.write(f'[ACC]: {vars.accumulatore}\n')
 				f.write(f'[MEM]: {memoria}\n')
 				f.write(f'istr: {istr}; arg: {arg}\n')
-	
-	if(istr == 'READ' or istr == 'WRITE'): #prints debug before READ||WRITE instruction (to avoid confusion)
+
+	if not(istr == 'STORE' or istr == 'LOAD' or istr == 'STORE@' or istr == 'LOAD@' or istr == 'LOAD='): #prints debug before READ||WRITE instruction (to avoid confusion)
 		printDebug()
 	#instructions
 	try:
@@ -348,9 +347,9 @@ while True: #until END instruction
 		print(f'    istr -> istr:{col.WARNING} {istr}{col.FAIL}; arg:{col.WARNING} {arg}{col.ENDC}')
 		exceptionCatch()
 		
-	
+
 	#prints debug after instruction if istr is not READ or WRITE (to avoid confusion with instructions like STORE)
-	if not(istr == 'READ' or istr == 'WRITE'):
+	if (istr == 'STORE' or istr == 'LOAD' or istr == 'STORE@' or istr == 'LOAD@' or istr == 'LOAD='):
 		printDebug()
 
 
