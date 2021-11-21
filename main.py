@@ -5,6 +5,19 @@ init()
 
 """TODO
 - Sistemare i file di esempio
+- Definizione formale di celle della memoria (solo un idea, non ha impatti sul funzionamento del codice)
+eg:
+	---- main.code ----
+	#MEM
+	1: somma
+	2: cont
+	#CODE
+	...
+	STORE 3
+	...
+	END
+	-------------------
+	[MEM] = {1: x, 2:y, 3:z, ...}
 """
 
 #colors
