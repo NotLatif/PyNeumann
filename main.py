@@ -1,7 +1,15 @@
 import config as cfg
 import glob, sys
-from colorama import init
-init()
+try:
+	from colorama import init
+	init()
+except ModuleNotFoundError:
+	if cfg.colors:
+		print("\n\nError, colorama module not found, color codes may display weird characters.")
+		print("If you don't want to install colorama: set 'colors' to False in the file 'config.py'")
+		print("If you want colors please install colorama use the command")
+		print("pip install colorama\n\n")
+
 
 """TODO
 - Sistemare i file di esempio
