@@ -5,7 +5,7 @@ init()
 
 """TODO
 - Sistemare i file di esempio
-- Definizione formale di celle della memoria (solo un idea, non ha impatti sul funzionamento del codice)
+- Assegnamento esplicito delle celle della memoria all'inizio (solo un idea, non ha impatti sul funzionamento del codice)
 eg:
 	---- main.code ----
 	#MEM
@@ -36,22 +36,21 @@ class vars:
 	linea = 0
 	fileInputStrings = []
 
-	def getNextInput():
+	def getFileNextInput():
 		try:
 			return vars.fileInputStrings.pop(0)
-		except IndexError as e:
+		except IndexError:
 			print(f"{col.FAIL}ERROE: Il file {cfg.inputFile} non ha abbastanza input{col.ENDC}")
 			sys.exit(0)
 
-#n of instructions counter
-def incIst():
-	vars.nIstruzioni += 1
+	def incIst():
+		vars.nIstruzioni += 1
 
 #i/o instructions
 def read():
-	incIst()
+	vars.incIst()
 	if(cfg.useFileInput):
-		inp = vars.getNextInput()
+		inp = vars.getFileNextInput()
 	else:
 		inp = input(f'{col.CYAN}input > ')
 	
@@ -62,93 +61,93 @@ def read():
 	print(col.ENDC, end = '')
 
 def write():
-	incIst()
+	vars.incIst()
 	nastroScr = vars.accumulatore
 	print(f'{col.GREEN}output > {nastroScr}')
 	print(col.ENDC, end = '')
 
 def load(x, mem):
-	incIst()
+	vars.incIst()
 	vars.accumulatore = mem[int(x)]
 
 def store(x, mem):
-	incIst()
+	vars.incIst()
 	mem[int(x)] = vars.accumulatore
 
 #arithmetic instructions
 def add(x, mem):
-	incIst()
+	vars.incIst()
 	vars.accumulatore += mem[int(x)]
 
 def sub(x, mem):
-	incIst()
+	vars.incIst()
 	vars.accumulatore -= mem[int(x)]
 
 def mult(x, mem):
-	incIst()
+	vars.incIst()
 	vars.accumulatore *= mem[int(x)]
 
 def div(x, mem):
-	incIst()
+	vars.incIst()
 	vars.accumulatore //= mem[int(x)]
 
 def loadEq(x):
-	incIst()
+	vars.incIst()
 	vars.accumulatore = x
 
 def addEq(x):
-	incIst()
+	vars.incIst()
 	vars.accumulatore += x
 
 def subEq(x):
-	incIst()
+	vars.incIst()
 	vars.accumulatore -= x
 
 def multEq(x):
-	incIst()
+	vars.incIst()
 	vars.accumulatore *= x
 
 def divEq(x):
-	incIst()
+	vars.incIst()
 	vars.accumulatore //= x
 
 #logic instructions
 def br(x): #BRanch (unconditioned)
-	incIst()
+	vars.incIst()
 	vars.linea = int(x)
 
 def beq(x): #BranchEQual (if [ACC] == 0)
-	incIst()
+	vars.incIst()
 	if (vars.accumulatore == 0):
 		vars.linea = int(x)
 
 def bge(x): #BranchGreaterEqual (if [ACC] >= 0)
-	incIst()
+	vars.incIst()
 	if (vars.accumulatore >= 0):
 		vars.linea = int(x)
 
 def bg(x): #BranchGreater (if [ACC] > 0)
-	incIst()
+	vars.incIst()
 	if (vars.accumulatore > 0):
 		vars.linea = int(x)
 
 def ble(x): #BranchLowerEqual (if [ACC] <= 0)
-	incIst()
+	vars.incIst()
 	if (vars.accumulatore <= 0):
 		vars.linea = int(x)
 
 def bl(x): #BranchLower (if [ACC] < 0)
-	incIst()
+	vars.incIst()
 	if (vars.accumulatore < 0):
 		vars.linea = int(x)
 
 def loadAt(x, mem): #Load [memoria[x]]
-	incIst()
+	vars.incIst()
 	addr = mem[x]
 	load(int(addr), mem)
 
 def storeAt(x, mem): #Store [memoria[x]]
-	incIst()
+	vars.incIst()
 	addr = mem[x]
 	store(int(addr))
 
