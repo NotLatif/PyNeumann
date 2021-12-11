@@ -14,18 +14,17 @@ except ModuleNotFoundError:
 """TODO
 - Sistemare i file di esempio
 - Assegnamento esplicito delle celle della memoria all'inizio (solo un idea, non ha impatti sul funzionamento del codice)
-eg:
-	---- main.code ----
-	#MEM
-	1: somma
-	2: cont
-	#CODE
-	...
-	STORE 3
-	...
-	END
-	-------------------
-	[MEM] = {1: x, 2:y, 3:z, ...}
+SCARTATA, dato che si può semplicemente fare
+#FILE main.code
+
+...
+END
+
+Celle:
+0    somma
+1    media
+2    valore letto
+
 """
 
 #colors
