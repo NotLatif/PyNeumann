@@ -54,12 +54,12 @@ class vars:
 		vars.nIstruzioni += 1
 
 #i/o instructions
-def read():
+def read(prompt = ''):
 	vars.incIst()
 	if(cfg.useFileInput):
 		inp = vars.getFileNextInput()
 	else:
-		inp = input(f'{col.CYAN}input > ')
+		inp = input(f'{col.CYAN}input ({prompt})> ')
 	
 	try: #ensures to store an int if the value is a number
 		vars.accumulatore = int(inp)
@@ -156,7 +156,7 @@ def loadAt(x, mem): #Load [memoria[x]]
 def storeAt(x, mem): #Store [memoria[x]]
 	vars.incIst()
 	addr = mem[x]
-	store(int(addr))
+	store(int(addr), mem)
 
 #script-related
 def parseLine(line):
@@ -287,7 +287,7 @@ def main():
 		#instructions
 		try:
 			if(istr == 'READ'):#i/o
-				read()
+				read(arg)
 			elif(istr == 'WRITE'):
 				write()
 			elif(istr == 'LOAD'):#memory
@@ -387,7 +387,6 @@ def main():
 	elif(cfg.outputFile != ''):
 		with open(cfg.outputFile, "a") as f:
 			f.write(f'{vars.accumulatore}')
-	sys.exit(1)
 
 if __name__ == "__main__":
 	main()

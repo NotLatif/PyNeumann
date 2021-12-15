@@ -2,7 +2,7 @@
 Un simulatore della macchina di Von Neumann (made by NotLatif)
 
 ## Requirements  
-[colorama](https://pypi.org/project/colorama/) `pip install colorama`
+(optional) [colorama](https://pypi.org/project/colorama/) `pip install colorama`
 
 ## La macchina di Von Neumann  
 La [macchina di Von Neumann](https://it.wikipedia.org/wiki/Architettura_di_von_Neumann) è costituita da quattro elementi fondamentali:
@@ -33,7 +33,7 @@ Di seguito elencati ci sono le informazioni principali da sapere per iniziare ad
 
 ## Le istruzioni
  #### I/O
-- `READ`: legge dal nastro di input
+- `READ x`: legge dal nastro di input (opzionale: `string x` comunica all'utente cosa dovrebbe inserire)
 - `WRITE`: scrive sul nastro di output
  #### Memoria
 - `LOAD x`: Il contenuto della cella x viene trasferito all'accumulatore
@@ -74,12 +74,14 @@ Il programma principale: `main.py` incropora le impostazioni contenute nel file 
 Questo è il file di configurazione che contiene alcuni parametri modificabili dall'utente:
 - `showDebug` (`bool`) -> [True] da come output l'esecuzione del programma istruzione per istruzione mentre viene interpretato; altrimenti [False] restituisce solo il risultato finale
 - `startLine` (`int`) -> definisce la linea da cui si vuole iniziare a contare. Normalmente nel linguaggio di Von Neumann la prima riga è la riga `0`, però per facilità di scrittura del codice attraverso editor di testo che iniziano a contare le righe da `1`, il valore si può impostare ad 1
-- `commentChar`(`char`) -> permette di cambiare il carattere scelto per i commenti (default: `#`)
+- `commentChar`(`char`) -> permette di cambiare il carattere scelto per i commenti (default: `;`)
+- ##### `automazione`
 - `filename` (`string`) -> definisce il file da leggere dal simulatore, può essere lasciato vuoto
 - `useFileInput` (`bool`) -> Se impostato su True leggerà gli input dal file `inputFile`, altrimenti dal terminale attraverso cui lo script viene eseguito
 - `inputFile` (`string`) -> Il nome del file da cui possono venir letti gli input se viene impostato `useFileInput = True`. Gli input vanno scritti nel file `inputFile` uno per riga
 - `outputFile` (`string`) -> È il file su cui viene salvato il risultato delle operazioni (debug compreso), lascia vuoto se non vuoi un output su file
 - `minimalOutput` (`bool`) -> Se impostato su True, salverà nel file `outputFile` solamente il valore dell'accumulatore
+- ##### `misc`
 - `colors` (`bool`) -> Se True, aggiunge un po' di colore allo scipt
  
 ###   ATTENZIONE
@@ -87,14 +89,16 @@ Il valore di `config.startLine` causerà problemi a codici scritti avendo in men
 
 Utilizzare i commenti su righe dedicate potrebbe causare problemi con le istruzioni logiche (`BR, BEQ, ...`) per questo è sempre preferibile commentare alla fine del codice oppure accanto alle istruzioni:
 ```
-LOAD 123 # commento bellissimo
+LOAD 123; commento bellissimo
 ...
 END
-#creato da me
-#altri commenti
+LNSTRT 1
+creato da me
+altri commenti
 ```
 
 Se `config.filename` viene lasciato vuoto (`''`) il programma chiederà quale dei file `*.code` presenti nella stessa directory aprire 
+
 
 ## TODO
 - la lista di cose da fare è presente all'inizio del file `main.py`

@@ -1,11 +1,11 @@
 load= 0
 store 1
-read
+read quanti_numeri?
 div= 2
 store 0
 beq 17
-read
-read
+read numero
+read numero
 sub 1
 bg 11
 br 13
