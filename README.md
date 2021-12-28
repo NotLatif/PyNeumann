@@ -1,16 +1,8 @@
 # PyNeumann
-Un simulatore della macchina di Von Neumann (made by NotLatif)
+Un simulatore che interpreta le istruzioni della macchina di Von Neumann (made by NotLatif)
 
 ## Requirements  
 (optional) [colorama](https://pypi.org/project/colorama/) `pip install colorama`
-
-## La macchina di Von Neumann  
-La [macchina di Von Neumann](https://it.wikipedia.org/wiki/Architettura_di_von_Neumann) è costituita da quattro elementi fondamentali:
-
-- l'unità di elaborazione (CPU)
-- la memoria centrale (RAM)
-- le periferiche (interfaccia I/O)
-- il bus di sistema
 
 ## Utilizzo dello script  
 Di seguito elencati ci sono le informazioni principali da sapere per iniziare ad usare il simulatore, per altri dettagli guarda la sezione [Funzionamento del codice](#funzionamento-del-codice)  
