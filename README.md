@@ -1,5 +1,5 @@
 # PyNeumann
-Un simulatore che interpreta le istruzioni della macchina di Von Neumann (made by NotLatif)
+Un simulatore che interpreta le istruzioni della macchina di Von Neumann
 
 ## Requirements  
 (optional) [colorama](https://pypi.org/project/colorama/) `pip install colorama`
