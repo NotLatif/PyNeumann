@@ -5,10 +5,7 @@ try:
 	init()
 except ModuleNotFoundError:
 	if cfg.colors:
-		print("\n\nError, colorama module not found, color codes may display weird characters.")
-		print("If you don't want to install colorama: set 'colors' to False in the file 'config.py'")
-		print("If you want colors please install colorama use the command")
-		print("pip install colorama\n\n")
+		print("\n\nError, colorama module not found, color codes may display weird characters. (If so, disable colors in config.py)")
 
 
 """TODO
@@ -195,7 +192,7 @@ def main():
 		else: #.code file
 			cfg.fileName = files[res]
 
-	if(cfg.useFileInput and live): #toggles stdin from file/user input
+	if(cfg.useFileInput ): #toggles stdin from file/user input
 		with open(cfg.inputFile) as f:
 			vars.fileInputStrings = f.read().splitlines()
 
